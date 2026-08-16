@@ -1,0 +1,709 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Chaddha Fashion | Premium Style</title>
+    <style>
+      :root {
+        --bg: #f7f1ee;
+        --panel: #f1e8e4;
+        --panel-dark: #e4d3ca;
+        --text: #1d1d1d;
+        --muted: #4b4b4b;
+        --white: #ffffff;
+        --accent: #b91c5c;
+        --soft-accent: #d97706;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        margin: 0;
+        background: #efefef;
+        font-family: Arial, Helvetica, sans-serif;
+        color: var(--text);
+      }
+
+      .page {
+        width: min(1100px, 92%);
+        margin: 40px auto;
+        background: transparent;
+      }
+
+      .topbar {
+        display: grid;
+        grid-template-columns: 1.2fr 3.5fr 0.3fr;
+        align-items: center;
+        gap: 16px;
+        margin-bottom: 18px;
+        min-height: 80px;
+      }
+
+      .logo-box,
+      .nav-box,
+      .banner,
+      .intro,
+      .card,
+      .footer {
+        background: var(--panel);
+        border: 1px solid rgba(0, 0, 0, 0.08);
+      }
+
+      .logo-box {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        min-height: 82px;
+        padding: 12px;
+        cursor: pointer;
+      }
+
+      .logo-box img {
+        display: block;
+        max-width: 100%;
+        max-height: 82px;
+        object-fit: contain;
+        filter: drop-shadow(0 6px 12px rgba(185, 28, 92, 0.15));
+      }
+
+      .nav-box {
+        min-height: 82px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 28px;
+        padding: 16px 24px;
+        font-weight: 600;
+        color: var(--muted);
+        text-transform: uppercase;
+        letter-spacing: 0.04em;
+        font-size: 14px;
+      }
+
+      .nav-box span {
+        display: inline-block;
+        padding: 8px 12px;
+        border-radius: 4px;
+        cursor: pointer;
+        transition: color 0.3s;
+      }
+
+      .nav-box span:hover {
+        color: var(--accent);
+      }
+
+      .cart-icon {
+        background: var(--panel);
+        border: 1px solid rgba(0, 0, 0, 0.08);
+        min-height: 82px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        position: relative;
+        border-radius: 4px;
+        padding: 12px;
+        font-size: 32px;
+        transition: transform 0.2s;
+      }
+
+      .cart-icon:hover {
+        transform: scale(1.05);
+      }
+
+      .user-actions {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 10px;
+      }
+
+      .logout-btn {
+        background: var(--accent);
+        color: white;
+        border: none;
+        border-radius: 8px;
+        padding: 8px 12px;
+        font-weight: 700;
+        cursor: pointer;
+      }
+
+      .cart-badge {
+        position: absolute;
+        top: 8px;
+        right: 8px;
+        background: var(--accent);
+        color: white;
+        border-radius: 50%;
+        width: 24px;
+        height: 24px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 12px;
+        font-weight: bold;
+      }
+
+      .banner {
+        min-height: 420px;
+        margin: 14px 0 18px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        position: relative;
+        overflow: hidden;
+        background: #ececec;
+        border: 1px solid rgba(0, 0, 0, 0.08);
+      }
+
+      .banner::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(135deg, rgba(255,255,255,0.1), rgba(0,0,0,0.05));
+        z-index: 1;
+      }
+
+      .banner img {
+        position: absolute;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        display: block;
+      }
+
+      .banner-content {
+        position: relative;
+        z-index: 2;
+        text-align: center;
+        color: var(--text);
+        background: rgba(255,255,255,0.18);
+        padding: 24px 30px;
+        border-radius: 12px;
+        backdrop-filter: blur(2px);
+      }
+
+      .banner-content h2 {
+        margin: 0 0 8px;
+        font-size: clamp(32px, 4vw, 56px);
+        letter-spacing: 0.04em;
+      }
+
+      .banner-content p {
+        margin: 0;
+        font-size: 18px;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+      }
+
+      .intro {
+        min-height: 110px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-bottom: 18px;
+        padding: 20px 30px;
+        font-size: clamp(22px, 2vw, 32px);
+        font-weight: 700;
+        text-align: center;
+      }
+
+      .section-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin: 24px 0 16px;
+        padding: 12px 0;
+        border-bottom: 2px solid var(--accent);
+      }
+
+      .section-header h3 {
+        margin: 0;
+        font-size: 24px;
+        font-weight: 700;
+      }
+
+      .view-all-link {
+        color: var(--accent);
+        text-decoration: none;
+        font-weight: 600;
+        cursor: pointer;
+        transition: color 0.3s;
+      }
+
+      .view-all-link:hover {
+        color: #ff2d7d;
+      }
+
+      .product-grid {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(180px, 1fr));
+        gap: 18px;
+        margin-bottom: 28px;
+      }
+
+      .section-container {
+        margin-bottom: 32px;
+      }
+
+      .card {
+        min-height: 240px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        position: relative;
+        overflow: hidden;
+        background: #f3f3f3;
+        cursor: pointer;
+        transition: transform 0.3s, box-shadow 0.3s;
+      }
+
+      .card:hover {
+        transform: translateY(-8px);
+        box-shadow: 0 8px 16px rgba(0,0,0,0.15);
+      }
+
+      .card img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        display: block;
+      }
+
+      .card-overlay {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        background: rgba(0,0,0,0.7);
+        color: white;
+        padding: 12px;
+        transform: translateY(100%);
+        transition: transform 0.3s;
+      }
+
+      .card:hover .card-overlay {
+        transform: translateY(0);
+      }
+
+      .card-overlay button {
+        background: var(--accent);
+        color: white;
+        border: none;
+        padding: 8px 16px;
+        border-radius: 4px;
+        cursor: pointer;
+        font-weight: 600;
+        width: 100%;
+      }
+
+      .card-overlay button:hover {
+        background: #ff2d7d;
+      }
+
+      .footer {
+        background: #f5f5f5;
+        border: 1px solid rgba(0, 0, 0, 0.08);
+        padding: 36px 28px 18px;
+        margin-top: 18px;
+      }
+
+      .footer-inner {
+        display: grid;
+        grid-template-columns: 1.8fr 1fr 1fr 1fr 1.2fr;
+        gap: 26px;
+        align-items: start;
+      }
+
+      .footer-brand {
+        padding-right: 18px;
+      }
+
+      .footer-brand h3 {
+        margin: 0 0 10px;
+        font-size: 30px;
+        letter-spacing: 0.03em;
+        text-transform: none;
+      }
+
+      .footer-brand p {
+        margin: 0;
+        color: var(--muted);
+        line-height: 1.7;
+        font-size: 15px;
+      }
+
+      .footer-col h4 {
+        margin: 0 0 14px;
+        font-size: 15px;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        color: var(--text);
+      }
+
+      .footer-col ul {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+      }
+
+      .footer-col li {
+        margin-bottom: 8px;
+        color: var(--muted);
+        font-size: 14px;
+      }
+
+      .socials {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+        margin-top: 10px;
+      }
+
+      .socials span {
+        background: #fff;
+        border: 1px solid rgba(0,0,0,0.08);
+        padding: 8px 12px;
+        border-radius: 20px;
+        font-size: 13px;
+      }
+
+      .footer-divider {
+        border: 0;
+        border-top: 1px solid rgba(0, 0, 0, 0.18);
+        margin: 28px 0 18px;
+      }
+
+      .footer-bottom {
+        text-align: center;
+        font-size: 14px;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        color: var(--muted);
+        padding-bottom: 10px;
+      }
+
+      @media (max-width: 760px) {
+        .topbar {
+          grid-template-columns: 1fr;
+        }
+
+        .footer-inner {
+          grid-template-columns: 1fr 1fr;
+        }
+
+        .nav-box {
+          flex-wrap: wrap;
+          gap: 12px;
+        }
+
+        .product-grid {
+          grid-template-columns: 1fr;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="page">
+      <header class="topbar">
+        <div class="logo-box" onclick="goHome()">
+          <img src="./chaddha-logo.svg" alt="Chaddha Fashion logo" />
+        </div>
+        <nav class="nav-box" aria-label="Main navigation">
+          <span onclick="goHome()">Home</span>
+          <span>Men</span>
+          <span>Women</span>
+          <span>Kids</span>
+          <span>Sale</span>
+        </nav>
+        <div class="user-actions">
+          <div class="cart-icon" onclick="goToCart()">
+            🛒
+            <div class="cart-badge" id="cart-count">0</div>
+          </div>
+          <button class="logout-btn" onclick="logoutUser()">Logout</button>
+        </div>
+      </header>
+
+      <section class="banner" aria-label="Promotional banner">
+        <img src="./My Boy.jpeg" alt="Fashion model" />
+        <div class="banner-content">
+          <h2>Big Fashion Sale</h2>
+          <p>Up to 60% off</p>
+        </div>
+      </section>
+
+      <section class="intro">Shop the Latest Trends for Every Season</section>
+
+      <!-- Featured Products Section -->
+      <div class="section-container">
+        <div class="section-header">
+          <h3>Featured Products</h3>
+          <a class="view-all-link" onclick="goToProducts()">View All →</a>
+        </div>
+        <section class="product-grid" id="featured-grid">
+          <!-- Featured products will be inserted here -->
+        </section>
+      </div>
+
+      <!-- New Arrivals Section -->
+      <div class="section-container">
+        <div class="section-header">
+          <h3>New Arrivals</h3>
+          <a class="view-all-link" onclick="goToProducts()">View All →</a>
+        </div>
+        <section class="product-grid" id="new-arrivals-grid">
+          <!-- New arrivals will be inserted here -->
+        </section>
+      </div>
+
+      <!-- Best Sellers Section -->
+      <div class="section-container">
+        <div class="section-header">
+          <h3>Best Sellers</h3>
+          <a class="view-all-link" onclick="goToProducts()">View All →</a>
+        </div>
+        <section class="product-grid" id="best-sellers-grid">
+          <!-- Best sellers will be inserted here -->
+        </section>
+      </div>
+
+      <!-- Trending Now Section -->
+      <div class="section-container">
+        <div class="section-header">
+          <h3>Trending Now</h3>
+          <a class="view-all-link" onclick="goToProducts()">View All →</a>
+        </div>
+        <section class="product-grid" id="trending-grid">
+          <!-- Trending products will be inserted here -->
+        </section>
+      </div>
+
+      <footer class="footer">
+        <div class="footer-inner">
+          <div class="footer-brand">
+            <h3>Fashion for Every Moment</h3>
+            <p>Discover stylish products made for you.</p>
+          </div>
+
+          <div class="footer-col">
+            <h4>Shop</h4>
+            <ul>
+              <li>Women</li>
+              <li>Men</li>
+              <li>Kids</li>
+              <li>New Arrivals</li>
+              <li>Sale</li>
+            </ul>
+          </div>
+
+          <div class="footer-col">
+            <h4>Customer Care</h4>
+            <ul>
+              <li>Contact Us</li>
+              <li>FAQs</li>
+              <li>Shipping &amp; Delivery</li>
+              <li>Returns &amp; Refunds</li>
+              <li>Order</li>
+            </ul>
+          </div>
+
+          <div class="footer-col">
+            <h4>About Us</h4>
+            <ul>
+              <li>Our Story</li>
+              <li>Careers</li>
+              <li>Privacy Policy</li>
+              <li>Terms &amp; Conditions</li>
+            </ul>
+          </div>
+
+          <div class="footer-col">
+            <h4>Follow Us</h4>
+            <div class="socials">
+              <span>Instagram</span>
+              <span>Facebook</span>
+              <span>Pinterest</span>
+              <span>YouTube</span>
+            </div>
+          </div>
+        </div>
+
+        <hr class="footer-divider" />
+
+        <div class="footer-bottom">© 2026 CHADDHA FASHION. All Rights Reserved.</div>
+      </footer>
+    </div>
+
+    <script>
+      function checkLogin() {
+        const loggedIn = localStorage.getItem('chaddha_logged_in');
+        if (loggedIn !== 'true') {
+          window.location.href = 'login.html';
+          return false;
+        }
+        return true;
+      }
+
+      function logoutUser() {
+        localStorage.removeItem('chaddha_logged_in');
+        localStorage.removeItem('chaddha_user_email');
+        localStorage.removeItem('chaddha_user_password');
+        window.location.href = 'login.html';
+      }
+
+      checkLogin();
+
+      // Extended Product data with categories
+      const allProducts = [
+        {
+          id: 1,
+          name: "Premium Men's Fashion",
+          image: './Box 1.jpg',
+          price: 1999,
+          description: 'Premium quality men\'s fashion collection with latest trends',
+          category: 'men',
+          featured: true,
+          newArrival: true,
+          bestSeller: false,
+          trending: true
+        },
+        {
+          id: 2,
+          name: "Women's Essentials",
+          image: './box 2.jpg',
+          price: 2499,
+          description: 'Beautiful women\'s collection for every occasion',
+          category: 'women',
+          featured: true,
+          newArrival: false,
+          bestSeller: true,
+          trending: true
+        },
+        {
+          id: 3,
+          name: "Kids Collection",
+          image: './box 3.jpg',
+          price: 999,
+          description: 'Comfortable and stylish clothing for kids',
+          category: 'kids',
+          featured: true,
+          newArrival: true,
+          bestSeller: true,
+          trending: false
+        },
+        {
+          id: 4,
+          name: "Summer Dress Collection",
+          image: './box 2.jpg',
+          price: 1599,
+          description: 'Lightweight and comfortable summer dresses',
+          category: 'women',
+          featured: false,
+          newArrival: true,
+          bestSeller: false,
+          trending: true
+        },
+        {
+          id: 5,
+          name: "Casual Men's Wear",
+          image: './Box 1.jpg',
+          price: 1299,
+          description: 'Casual and comfortable men\'s clothing line',
+          category: 'men',
+          featured: false,
+          newArrival: false,
+          bestSeller: true,
+          trending: true
+        },
+        {
+          id: 6,
+          name: "Kids Sports Wear",
+          image: './box 3.jpg',
+          price: 799,
+          description: 'Active wear for kids with great comfort',
+          category: 'kids',
+          featured: false,
+          newArrival: true,
+          bestSeller: true,
+          trending: false
+        }
+      ];
+
+      // Cart management
+      let cart = JSON.parse(localStorage.getItem('cart')) || [];
+
+      function updateCartCount() {
+        const count = cart.length;
+        document.getElementById('cart-count').textContent = count;
+      }
+
+      function renderProductCard(product) {
+        return `
+          <article class="card" onclick="viewProduct(${product.id})">
+            <img src="${product.image}" alt="${product.name}" />
+            <div class="card-overlay">
+              <button onclick="addToCart(${product.id}, event)">Add to Cart</button>
+            </div>
+          </article>
+        `;
+      }
+
+      function renderProducts() {
+        // Featured Products
+        const featured = allProducts.filter(p => p.featured);
+        document.getElementById('featured-grid').innerHTML = featured.map(renderProductCard).join('');
+
+        // New Arrivals
+        const newArrivals = allProducts.filter(p => p.newArrival);
+        document.getElementById('new-arrivals-grid').innerHTML = newArrivals.map(renderProductCard).join('');
+
+        // Best Sellers
+        const bestSellers = allProducts.filter(p => p.bestSeller);
+        document.getElementById('best-sellers-grid').innerHTML = bestSellers.map(renderProductCard).join('');
+
+        // Trending
+        const trending = allProducts.filter(p => p.trending);
+        document.getElementById('trending-grid').innerHTML = trending.map(renderProductCard).join('');
+      }
+
+      function addToCart(productId, event) {
+        event.stopPropagation();
+        const product = allProducts.find(p => p.id === productId);
+        if (product) {
+          cart.push({...product, cartId: Date.now()});
+          localStorage.setItem('cart', JSON.stringify(cart));
+          updateCartCount();
+          alert(`${product.name} added to cart!`);
+        }
+      }
+
+      function viewProduct(productId) {
+        const product = allProducts.find(p => p.id === productId);
+        if (product) {
+          alert(`${product.name}\n\nPrice: ₹${product.price}\n\n${product.description}\n\nClick "Add to Cart" to purchase!`);
+        }
+      }
+
+      function goToCart() {
+        window.location.href = 'cart.html';
+      }
+
+      function goHome() {
+        window.location.href = 'index.html';
+      }
+
+      function goToProducts() {
+        window.location.href = 'products.html';
+      }
+
+      // Initialize
+      updateCartCount();
+      renderProducts();
+    </script>
+  </body>
+</html>

@@ -1,0 +1,516 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Checkout - Chaddha Fashion</title>
+    <style>
+      :root {
+        --bg: #f7f1ee;
+        --panel: #f1e8e4;
+        --text: #1d1d1d;
+        --muted: #4b4b4b;
+        --accent: #b91c5c;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        margin: 0;
+        background: #efefef;
+        font-family: Arial, Helvetica, sans-serif;
+        color: var(--text);
+      }
+
+      .page {
+        width: min(1100px, 92%);
+        margin: 40px auto;
+      }
+
+      .topbar {
+        display: grid;
+        grid-template-columns: 1.2fr 3.5fr 0.3fr;
+        align-items: center;
+        gap: 16px;
+        margin-bottom: 18px;
+        min-height: 80px;
+        background: var(--panel);
+        border: 1px solid rgba(0, 0, 0, 0.08);
+        padding: 12px;
+        border-radius: 4px;
+      }
+
+      .logo-box {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+      }
+
+      .logo-box img {
+        max-width: 100%;
+        max-height: 60px;
+        object-fit: contain;
+      }
+
+      .nav-box {
+        display: flex;
+        gap: 28px;
+        font-weight: 600;
+        color: var(--muted);
+        text-transform: uppercase;
+        font-size: 14px;
+      }
+
+      .nav-box span {
+        cursor: pointer;
+        transition: color 0.3s;
+      }
+
+      .nav-box span:hover {
+        color: var(--accent);
+      }
+
+      .cart-icon {
+        font-size: 28px;
+        cursor: pointer;
+      }
+
+      .title {
+        font-size: 32px;
+        font-weight: 700;
+        margin: 20px 0;
+      }
+
+      .checkout-wrapper {
+        display: grid;
+        grid-template-columns: 2fr 1fr;
+        gap: 20px;
+      }
+
+      .checkout-section {
+        background: white;
+        border: 1px solid rgba(0, 0, 0, 0.08);
+        border-radius: 4px;
+        padding: 24px;
+      }
+
+      .section-title {
+        font-size: 20px;
+        font-weight: 700;
+        margin-bottom: 16px;
+        border-bottom: 2px solid var(--accent);
+        padding-bottom: 12px;
+      }
+
+      .form-group {
+        margin-bottom: 16px;
+      }
+
+      .form-group label {
+        display: block;
+        margin-bottom: 6px;
+        font-weight: 600;
+        font-size: 14px;
+      }
+
+      .form-group input,
+      .form-group select,
+      .form-group textarea {
+        width: 100%;
+        padding: 10px;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+        font-family: Arial, sans-serif;
+        font-size: 14px;
+      }
+
+      .form-group input:focus,
+      .form-group select:focus,
+      .form-group textarea:focus {
+        outline: none;
+        border-color: var(--accent);
+        box-shadow: 0 0 4px rgba(255, 77, 157, 0.2);
+      }
+
+      .form-row {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 12px;
+      }
+
+      .order-summary {
+        background: white;
+        border: 1px solid rgba(0, 0, 0, 0.08);
+        border-radius: 4px;
+        padding: 20px;
+      }
+
+      .order-item {
+        display: flex;
+        gap: 12px;
+        margin-bottom: 16px;
+        padding-bottom: 16px;
+        border-bottom: 1px solid #eee;
+      }
+
+      .order-item:last-child {
+        border-bottom: none;
+      }
+
+      .order-item img {
+        width: 80px;
+        height: 80px;
+        object-fit: cover;
+        border-radius: 4px;
+      }
+
+      .item-info {
+        flex: 1;
+      }
+
+      .item-info h5 {
+        margin: 0 0 4px;
+        font-size: 14px;
+      }
+
+      .item-info p {
+        margin: 0;
+        color: var(--muted);
+        font-size: 12px;
+      }
+
+      .item-price {
+        font-weight: 600;
+        color: var(--accent);
+      }
+
+      .order-summary-row {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 12px;
+        font-size: 14px;
+      }
+
+      .order-summary-row.total {
+        font-weight: 700;
+        font-size: 18px;
+        border-top: 2px solid #eee;
+        padding-top: 12px;
+      }
+
+      .place-order-btn {
+        width: 100%;
+        background: var(--accent);
+        color: white;
+        border: none;
+        padding: 14px;
+        font-size: 16px;
+        font-weight: 600;
+        cursor: pointer;
+        border-radius: 4px;
+        margin-top: 20px;
+        transition: background 0.3s;
+      }
+
+      .place-order-btn:hover {
+        background: #ff2d7d;
+      }
+
+      .back-btn {
+        background: var(--panel);
+        color: var(--text);
+        border: none;
+        padding: 10px 20px;
+        cursor: pointer;
+        border-radius: 4px;
+        font-weight: 600;
+        margin-bottom: 16px;
+      }
+
+      .logout-btn {
+        background: var(--accent);
+        color: white;
+        border: none;
+        border-radius: 8px;
+        padding: 8px 12px;
+        font-weight: 700;
+        cursor: pointer;
+      }
+
+      .back-btn:hover {
+        background: var(--accent);
+        color: white;
+      }
+
+      @media (max-width: 960px) {
+        .checkout-wrapper {
+          grid-template-columns: 1fr;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="page">
+      <header class="topbar">
+        <div class="logo-box" onclick="goHome()">
+          <img src="./chaddha-logo.svg" alt="Chaddha Fashion logo" />
+        </div>
+        <nav class="nav-box">
+          <span onclick="goHome()">Home</span>
+          <span>Men</span>
+          <span>Women</span>
+          <span>Kids</span>
+          <span>Sale</span>
+        </nav>
+        <div style="display:flex; align-items:center; gap:10px;">
+          <div class="cart-icon" onclick="goToCart()">🛒</div>
+          <button class="logout-btn" onclick="logoutUser()">Logout</button>
+        </div>
+      </header>
+
+      <h1 class="title">Checkout</h1>
+
+      <div class="checkout-wrapper">
+        <div>
+          <button class="back-btn" onclick="goToCart()">← Back to Cart</button>
+
+          <!-- Shipping Address -->
+          <div class="checkout-section">
+            <h2 class="section-title">Shipping Address</h2>
+            <div class="form-group">
+              <label>Full Name *</label>
+              <input type="text" id="fullName" placeholder="Enter your full name" required />
+            </div>
+            <div class="form-group">
+              <label>Email Address *</label>
+              <input type="email" id="email" placeholder="Enter your email" required />
+            </div>
+            <div class="form-group">
+              <label>Phone Number *</label>
+              <input type="tel" id="phone" placeholder="Enter your phone number" required />
+            </div>
+            <div class="form-group">
+              <label>Street Address *</label>
+              <input type="text" id="address" placeholder="Enter your street address" required />
+            </div>
+            <div class="form-row">
+              <div class="form-group">
+                <label>City *</label>
+                <input type="text" id="city" placeholder="City" required />
+              </div>
+              <div class="form-group">
+                <label>State *</label>
+                <input type="text" id="state" placeholder="State" required />
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="form-group">
+                <label>Postal Code *</label>
+                <input type="text" id="postal" placeholder="Postal code" required />
+              </div>
+              <div class="form-group">
+                <label>Country *</label>
+                <input type="text" id="country" placeholder="Country" value="India" required />
+              </div>
+            </div>
+          </div>
+
+          <!-- Payment Information -->
+          <div class="checkout-section">
+            <h2 class="section-title">Payment Information</h2>
+            <div class="form-group">
+              <label>Cardholder Name *</label>
+              <input type="text" id="cardName" placeholder="Name on card" required />
+            </div>
+            <div class="form-group">
+              <label>Card Number *</label>
+              <input type="text" id="cardNumber" placeholder="1234 5678 9012 3456" maxlength="19" required />
+            </div>
+            <div class="form-row">
+              <div class="form-group">
+                <label>Expiry Date *</label>
+                <input type="text" id="expiry" placeholder="MM/YY" maxlength="5" required />
+              </div>
+              <div class="form-group">
+                <label>CVV *</label>
+                <input type="text" id="cvv" placeholder="123" maxlength="3" required />
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Order Summary -->
+        <div class="order-summary">
+          <h2 class="section-title">Order Summary</h2>
+          <div id="order-items"></div>
+
+          <div class="order-summary-row">
+            <span>Subtotal:</span>
+            <span id="subtotal-price">₹0</span>
+          </div>
+          <div class="order-summary-row">
+            <span>Shipping:</span>
+            <span id="shipping-price">₹0</span>
+          </div>
+          <div class="order-summary-row">
+            <span>Tax (10%):</span>
+            <span id="tax-price">₹0</span>
+          </div>
+          <div class="order-summary-row total">
+            <span>Total Amount:</span>
+            <span id="total-price">₹0</span>
+          </div>
+
+          <button class="place-order-btn" onclick="placeOrder()">Place Order</button>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      function checkLogin() {
+        const loggedIn = localStorage.getItem('chaddha_logged_in');
+        if (loggedIn !== 'true') {
+          window.location.href = 'login.html';
+          return false;
+        }
+        return true;
+      }
+
+      function logoutUser() {
+        localStorage.removeItem('chaddha_logged_in');
+        localStorage.removeItem('chaddha_user_email');
+        localStorage.removeItem('chaddha_user_password');
+        window.location.href = 'login.html';
+      }
+
+      checkLogin();
+
+      // Get cart from localStorage
+      let cart = JSON.parse(localStorage.getItem('cart')) || [];
+
+      const SHIPPING_COST = 99;
+      const TAX_RATE = 0.10;
+
+      function renderOrderItems() {
+        const container = document.getElementById('order-items');
+        
+        if (cart.length === 0) {
+          container.innerHTML = '<p>Your cart is empty</p>';
+          return;
+        }
+
+        container.innerHTML = cart.map(item => `
+          <div class="order-item">
+            <img src="${item.image}" alt="${item.name}" />
+            <div class="item-info">
+              <h5>${item.name}</h5>
+              <p>${item.description}</p>
+            </div>
+            <div class="item-price">₹${item.price}</div>
+          </div>
+        `).join('');
+      }
+
+      function updateOrderSummary() {
+        const subtotal = cart.reduce((sum, item) => sum + item.price, 0);
+        const shipping = cart.length > 0 ? SHIPPING_COST : 0;
+        const tax = subtotal * TAX_RATE;
+        const total = subtotal + shipping + tax;
+
+        document.getElementById('subtotal-price').textContent = `₹${subtotal}`;
+        document.getElementById('shipping-price').textContent = `₹${shipping}`;
+        document.getElementById('tax-price').textContent = `₹${Math.round(tax)}`;
+        document.getElementById('total-price').textContent = `₹${Math.round(total)}`;
+      }
+
+      function validateForm() {
+        const requiredFields = ['fullName', 'email', 'phone', 'address', 'city', 'state', 'postal', 'country', 'cardName', 'cardNumber', 'expiry', 'cvv'];
+        
+        for (let field of requiredFields) {
+          const value = document.getElementById(field).value.trim();
+          if (!value) {
+            alert(`Please fill in the ${field.replace(/([A-Z])/g, ' $1').toLowerCase()} field`);
+            return false;
+          }
+        }
+
+        // Basic email validation
+        const email = document.getElementById('email').value;
+        if (!email.includes('@')) {
+          alert('Please enter a valid email address');
+          return false;
+        }
+
+        // Basic card number validation
+        const cardNumber = document.getElementById('cardNumber').value.replace(/\s/g, '');
+        if (cardNumber.length < 13 || cardNumber.length > 19) {
+          alert('Please enter a valid card number');
+          return false;
+        }
+
+        return true;
+      }
+
+      function placeOrder() {
+        if (cart.length === 0) {
+          alert('Your cart is empty!');
+          return;
+        }
+
+        if (!validateForm()) {
+          return;
+        }
+
+        // Prepare order data
+        const orderData = {
+          orderId: 'ORD-' + Date.now(),
+          date: new Date().toLocaleDateString(),
+          items: cart,
+          shipping: {
+            name: document.getElementById('fullName').value,
+            email: document.getElementById('email').value,
+            phone: document.getElementById('phone').value,
+            address: document.getElementById('address').value,
+            city: document.getElementById('city').value,
+            state: document.getElementById('state').value,
+            postal: document.getElementById('postal').value,
+            country: document.getElementById('country').value
+          },
+          pricing: {
+            subtotal: cart.reduce((sum, item) => sum + item.price, 0),
+            shipping: SHIPPING_COST,
+            tax: Math.round(cart.reduce((sum, item) => sum + item.price, 0) * TAX_RATE),
+            total: Math.round(cart.reduce((sum, item) => sum + item.price, 0) * (1 + TAX_RATE) + SHIPPING_COST)
+          }
+        };
+
+        // Save order to localStorage
+        let orders = JSON.parse(localStorage.getItem('orders')) || [];
+        orders.push(orderData);
+        localStorage.setItem('orders', JSON.stringify(orders));
+
+        // Clear cart
+        localStorage.removeItem('cart');
+
+        // Show success message and redirect
+        alert(`Order placed successfully!\n\nOrder ID: ${orderData.orderId}\n\nThank you for shopping with Chaddha Fashion!`);
+        window.location.href = 'index.html';
+      }
+
+      function goHome() {
+        window.location.href = 'index.html';
+      }
+
+      function goToCart() {
+        window.location.href = 'cart.html';
+      }
+
+      // Initialize
+      renderOrderItems();
+      updateOrderSummary();
+    </script>
+  </body>
+</html>
