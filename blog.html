@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Style Journal | Chaddha Fashion</title>
+    <style>
+      :root {
+        --paper: #fffaf8;
+        --soft: #f1e8e4;
+        --ink: #1d1d1d;
+        --muted: #5d5553;
+        --accent: #b91c5c;
+        --gold: #d97706;
+        --border: rgba(29, 29, 29, 0.1);
+      }
+
+      * { box-sizing: border-box; }
+
+      body {
+        margin: 0;
+        background: #efefef;
+        color: var(--ink);
+        font-family: Arial, Helvetica, sans-serif;
+      }
+
+      .page { width: min(1100px, 92%); margin: 40px auto; }
+
+      .topbar {
+        display: grid;
+        grid-template-columns: 1.2fr 3.5fr 0.3fr;
+        align-items: center;
+        gap: 16px;
+        min-height: 82px;
+        margin-bottom: 18px;
+        padding: 12px;
+        background: var(--soft);
+        border: 1px solid var(--border);
+      }
+
+      .logo-box { display: flex; justify-content: center; cursor: pointer; }
+      .logo-box img { max-width: 100%; max-height: 60px; object-fit: contain; }
+
+      .nav-box {
+        display: flex;
+        justify-content: center;
+        flex-wrap: wrap;
+        gap: 28px;
+        color: var(--muted);
+        font-size: 14px;
+        font-weight: 600;
+        text-transform: uppercase;
+      }
+
+      .nav-box a { color: inherit; text-decoration: none; transition: color 0.2s; }
+      .nav-box a:hover, .nav-box .active { color: var(--accent); }
+
+      .cart-link {
+        color: var(--ink);
+        font-size: 28px;
+        text-align: center;
+        text-decoration: none;
+      }
+
+      .hero {
+        display: grid;
+        grid-template-columns: 1.1fr 0.9fr;
+        min-height: 320px;
+        margin-bottom: 30px;
+        overflow: hidden;
+        background: var(--paper);
+        border: 1px solid var(--border);
+      }
+
+      .hero-copy { padding: 52px 42px; align-self: center; }
+      .eyebrow { margin: 0 0 12px; color: var(--accent); font-size: 13px; font-weight: 700; letter-spacing: 0.16em; text-transform: uppercase; }
+      h1 { margin: 0 0 16px; font-size: clamp(38px, 6vw, 68px); line-height: 0.98; }
+      .hero-copy p { max-width: 480px; margin: 0; color: var(--muted); font-size: 18px; line-height: 1.6; }
+      .hero img { width: 100%; height: 100%; min-height: 320px; object-fit: cover; }
+
+      .section-heading { display: flex; justify-content: space-between; align-items: end; margin-bottom: 16px; border-bottom: 2px solid var(--accent); }
+      .section-heading h2 { margin: 0 0 10px; font-size: 28px; }
+      .section-heading span { margin-bottom: 12px; color: var(--muted); font-size: 14px; }
+
+      .article-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; }
+      .article-card { overflow: hidden; background: var(--paper); border: 1px solid var(--border); }
+      .article-card img { display: block; width: 100%; height: 210px; object-fit: cover; }
+      .article-content { padding: 20px; }
+      .article-content small { color: var(--accent); font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; }
+      .article-content h3 { margin: 10px 0 8px; font-size: 21px; line-height: 1.2; }
+      .article-content p { margin: 0 0 16px; color: var(--muted); line-height: 1.55; }
+      .read-link { color: var(--accent); font-weight: 700; text-decoration: none; }
+      .read-link:hover { color: var(--gold); }
+
+      footer { margin-top: 34px; padding: 22px; background: var(--soft); color: var(--muted); text-align: center; font-size: 14px; }
+
+      @media (max-width: 760px) {
+        .page { margin: 20px auto; }
+        .topbar, .hero { grid-template-columns: 1fr; }
+        .topbar { gap: 18px; }
+        .hero-copy { padding: 36px 26px; }
+        .hero img { min-height: 240px; }
+        .article-grid { grid-template-columns: 1fr; }
+      }
+    </style>
+  </head>
+  <body>
+    <main class="page">
+      <header class="topbar">
+        <div class="logo-box" onclick="location.href='index.html'">
+          <img src="./chaddha-logo.svg" alt="Chaddha Fashion logo" />
+        </div>
+        <nav class="nav-box" aria-label="Main navigation">
+          <a href="index.html">Home</a>
+          <a href="products.html">Shop</a>
+          <a class="active" href="blog.html" aria-current="page">Blog</a>
+          <a href="login.html">Account</a>
+        </nav>
+        <a class="cart-link" href="cart.html" aria-label="Shopping cart">&#128722;</a>
+      </header>
+
+      <section class="hero">
+        <div class="hero-copy">
+          <p class="eyebrow">The Style Journal</p>
+          <h1>Wear what feels like you.</h1>
+          <p>Practical style notes, seasonal inspiration, and thoughtful ways to build a wardrobe that moves with your life.</p>
+        </div>
+        <img src="./My Boy.jpeg" alt="Fashion styling inspiration" />
+      </section>
+
+      <section aria-labelledby="journal-title">
+        <div class="section-heading">
+          <h2 id="journal-title">Latest from the journal</h2>
+          <span>Fresh ideas for your wardrobe</span>
+        </div>
+        <div class="article-grid">
+          <article class="article-card">
+            <img src="./Box 1.jpg" alt="A curated fashion collection" />
+            <div class="article-content">
+              <small>Wardrobe</small>
+              <h3>Five essentials for an effortless everyday look</h3>
+              <p>Build flexible outfits around a few dependable pieces, then make them yours with texture and color.</p>
+              <a class="read-link" href="#">Read article</a>
+            </div>
+          </article>
+          <article class="article-card">
+            <img src="./Box 2.jpg" alt="Fashion pieces arranged together" />
+            <div class="article-content">
+              <small>Style Guide</small>
+              <h3>How to make one outfit work three ways</h3>
+              <p>Discover simple styling swaps that take a look from relaxed mornings to evenings out.</p>
+              <a class="read-link" href="#">Read article</a>
+            </div>
+          </article>
+          <article class="article-card">
+            <img src="./Box 3.jpg" alt="Seasonal fashion inspiration" />
+            <div class="article-content">
+              <small>New Season</small>
+              <h3>The colors we are loving this season</h3>
+              <p>Explore a warm, wearable palette and find the right accent for your current favorites.</p>
+              <a class="read-link" href="#">Read article</a>
+            </div>
+          </article>
+        </div>
+      </section>
+
+      <footer>&copy; 2026 Chaddha Fashion. Style, made personal.</footer>
+    </main>
+  </body>
+</html>
