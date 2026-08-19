@@ -405,6 +405,120 @@
           grid-template-columns: 1fr;
         }
       }
+
+      /* Editorial storefront layer */
+      :root {
+        --ink: #172321;
+        --muted: #64716d;
+        --paper: #f8f6f1;
+        --cream: #eee8dc;
+        --forest: #173f3a;
+        --coral: #d56b4f;
+        --line: rgba(23, 35, 33, 0.13);
+      }
+
+      body {
+        background: var(--paper);
+        color: var(--ink);
+        font-family: "Trebuchet MS", "Segoe UI", sans-serif;
+      }
+
+      .page {
+        width: min(1240px, calc(100% - 48px));
+        margin: 24px auto 48px;
+      }
+
+      .topbar {
+        grid-template-columns: 190px 1fr auto;
+        min-height: 76px;
+        margin-bottom: 24px;
+        padding: 10px 14px;
+        background: rgba(255, 255, 255, 0.72);
+        border: 1px solid var(--line);
+        border-radius: 18px;
+        box-shadow: 0 12px 30px rgba(23, 35, 33, 0.06);
+      }
+
+      .logo-box,
+      .nav-box,
+      .cart-icon {
+        min-height: 56px;
+        background: transparent;
+        border: 0;
+      }
+
+      .logo-box { justify-content: flex-start; padding: 8px; }
+      .logo-box img { max-height: 56px; filter: none; }
+      .nav-box { justify-content: center; gap: 8px; padding: 8px; }
+      .nav-box span { color: var(--ink); border-radius: 10px; padding: 10px 14px; }
+      .nav-box span:hover { color: var(--coral); background: var(--cream); }
+      .cart-icon { color: var(--forest); font-size: 28px; border-radius: 12px; }
+      .cart-icon:hover { background: var(--cream); transform: none; }
+      .logout-btn { background: var(--forest); border-radius: 999px; padding: 10px 16px; }
+      .cart-badge { background: var(--coral); }
+
+      .banner {
+        min-height: 540px;
+        margin: 0 0 24px;
+        justify-content: flex-start;
+        border: 0;
+        border-radius: 24px;
+        background: var(--forest);
+        box-shadow: 0 18px 40px rgba(23, 35, 33, 0.14);
+      }
+
+      .banner::before {
+        background: linear-gradient(90deg, rgba(8, 26, 24, 0.8) 0%, rgba(8, 26, 24, 0.2) 58%, rgba(8, 26, 24, 0.05));
+      }
+
+      .banner img { object-position: center 28%; opacity: 0.9; }
+      .banner-content { max-width: 580px; padding: 48px; text-align: left; background: transparent; backdrop-filter: none; }
+      .banner-content h2 { margin-bottom: 18px; color: #fffaf2; font-family: Georgia, serif; font-size: clamp(48px, 7vw, 92px); line-height: 0.95; letter-spacing: -0.02em; }
+      .banner-content p { color: #f1c9af; font-size: 14px; font-weight: 700; letter-spacing: 0.18em; }
+
+      .intro {
+        min-height: auto;
+        justify-content: flex-start;
+        margin-bottom: 42px;
+        padding: 28px 0 0;
+        background: transparent;
+        border: 0;
+        border-top: 1px solid var(--line);
+        font-family: Georgia, serif;
+        font-size: clamp(28px, 4vw, 48px);
+        font-weight: 400;
+        text-align: left;
+      }
+
+      .section-container { margin-bottom: 54px; }
+      .section-header { margin: 0 0 18px; padding: 0 0 14px; border-bottom: 1px solid var(--line); }
+      .section-header h3 { color: var(--forest); font-family: Georgia, serif; font-size: 30px; font-weight: 400; }
+      .view-all-link { color: var(--coral); font-size: 13px; letter-spacing: 0.08em; text-transform: uppercase; }
+      .section-container > section[style] { background: var(--cream) !important; border: 0 !important; border-radius: 0 !important; padding: 28px !important; }
+      .section-container > section[style] p { color: var(--ink) !important; max-width: 780px; }
+      .product-grid { grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 16px; }
+      .card { min-height: 340px; align-items: flex-end; background: var(--cream); border: 0; border-radius: 0; box-shadow: none; }
+      .card:hover { transform: translateY(-5px); box-shadow: 0 16px 28px rgba(23, 35, 33, 0.12); }
+      .card img { height: 100%; object-fit: cover; }
+      .card-overlay { transform: translateY(0); padding: 16px; background: linear-gradient(transparent, rgba(10, 22, 20, 0.9) 42%); }
+      .card-overlay::before { content: attr(data-name); display: block; margin-bottom: 10px; color: #fffaf2; font-family: Georgia, serif; font-size: 18px; }
+      .card-overlay button { background: var(--coral); border-radius: 999px; padding: 10px 16px; }
+      .footer { margin-top: 32px; padding: 44px 32px 18px; background: var(--forest); border: 0; border-radius: 20px; color: #fffaf2; }
+      .footer-brand h3, .footer-col h4 { color: #fffaf2; }
+      .footer-brand p, .footer-col li, .footer-bottom { color: #c6d4cf; }
+      .socials span { background: transparent; border-color: rgba(255,255,255,0.25); color: #fffaf2; }
+      .footer-divider { border-top-color: rgba(255,255,255,0.2); }
+
+      @media (max-width: 760px) {
+        .page { width: min(100% - 28px, 620px); margin-top: 14px; }
+        .topbar { grid-template-columns: 1fr auto; }
+        .nav-box { grid-column: 1 / -1; grid-row: 2; justify-content: flex-start; overflow-x: auto; }
+        .user-actions { grid-column: 2; grid-row: 1; }
+        .banner { min-height: 450px; }
+        .banner-content { padding: 30px; }
+        .product-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+        .card { min-height: 260px; }
+      }
     </style>
   </head>
   <body>
@@ -419,6 +533,7 @@
           <span onclick="goToProducts('women')">Women</span>
           <span onclick="goToProducts('kids')">Kids</span>
           <span>Sale</span>
+          <span onclick="location.href='blog.html'">Blog</span>
         </nav>
         <div class="user-actions">
           <div class="cart-icon" onclick="goToCart()">
@@ -521,7 +636,6 @@
             <ul>
               <li>Women</li>
               <li>Men</li>
-              <li>Kids</li>
               <li>New Arrivals</li>
               <li>Sale</li>
             </ul>
@@ -584,80 +698,49 @@
 
       checkLogin();
 
-      // Extended Product data with categories
+      // Product catalog grouped by gender and collection.
+      function getProductName(subcategory, price, imageNumber) {
+        const namedProducts = {
+          'Men T-Shirt-899': 'Men White T-Shirt',
+          'Men T-Shirt-999': 'Men Light Brown Simple T-Shirt',
+          'Men T-Shirt-1099': 'Men Brown T-Shirt',
+          'Men T-Shirt-1199': 'Men Casual T-Shirt',
+          'Men T-Shirt-1299': 'Men Casual Tshirt',
+          'Men Shirt-1399': 'Men Maroon Shirt',
+          'Men Shirt-1499': 'Men Blue Shirt',
+          'Men Shirt-1599': 'Men Party Wear Black Shirt',
+          'Men Shirt-1699': 'Men Formal Brown Shirt',
+          'Women Dresses-1799': 'Women Floral Dress',
+          'Women Dresses-1899': 'Women A Line Dress'
+        };
+        return namedProducts[`${subcategory}-${price}`] || (subcategory === 'Women Dresses' || subcategory === 'Women Ethnic Wear' ? subcategory : `${subcategory} ${imageNumber}`);
+      }
+
       const allProducts = [
-        {
-          id: 1,
-          name: "Premium Men's Fashion",
-          image: './Box 1.jpg',
-          price: 1999,
-          description: 'Premium quality men\'s fashion collection with latest trends',
-          category: 'men',
-          featured: true,
-          newArrival: true,
-          bestSeller: false,
-          trending: true
-        },
-        {
-          id: 2,
-          name: "Women's Essentials",
-          image: './box 2.jpg',
-          price: 2499,
-          description: 'Beautiful women\'s collection for every occasion',
-          category: 'women',
-          featured: true,
-          newArrival: false,
-          bestSeller: true,
-          trending: true
-        },
-        {
-          id: 3,
-          name: "Kids Collection",
-          image: './box 3.jpg',
-          price: 999,
-          description: 'Comfortable and stylish clothing for kids',
-          category: 'kids',
-          featured: true,
-          newArrival: true,
-          bestSeller: true,
-          trending: false
-        },
-        {
-          id: 4,
-          name: "Summer Dress Collection",
-          image: './box 2.jpg',
-          price: 1599,
-          description: 'Lightweight and comfortable summer dresses',
-          category: 'women',
-          featured: false,
-          newArrival: true,
-          bestSeller: false,
-          trending: true
-        },
-        {
-          id: 5,
-          name: "Casual Men's Wear",
-          image: './Box 1.jpg',
-          price: 1299,
-          description: 'Casual and comfortable men\'s clothing line',
-          category: 'men',
-          featured: false,
-          newArrival: false,
-          bestSeller: true,
-          trending: true
-        },
-        {
-          id: 6,
-          name: "Kids Sports Wear",
-          image: './box 3.jpg',
-          price: 799,
-          description: 'Active wear for kids with great comfort',
-          category: 'kids',
-          featured: false,
-          newArrival: true,
-          bestSeller: true,
-          trending: false
-        }
+        ...[
+          ['Men T-Shirt', 'Men Tshirt', 899], ['Men T-Shirt', 'Men Tshirt', 999], ['Men T-Shirt', 'Men Tshirt', 1099], ['Men T-Shirt', 'Men Tshirt', 1199], ['Men T-Shirt', 'Men Tshirt', 1299],
+          ['Men Shirt', 'Men Shirt', 1399], ['Men Shirt', 'Men Shirt', 1499], ['Men Shirt', 'Men Shirt', 1599], ['Men Shirt', 'Men Shirt', 1699],
+          ['Women Dresses', 'Women Dresses', 1799], ['Women Dresses', 'Women Dresses', 1899], ['Women Dresses', 'Women Dresses', 1999], ['Women Dresses', 'Women Dresses', 2099],
+          ['Women Ethnic Wear', 'Women ethnic Dresses', 2199], ['Women Ethnic Wear', 'Women ethnic Dresses', 2299], ['Women Ethnic Wear', 'Women ethnic Dresses', 2399], ['Women Ethnic Wear', 'Women ethnic Dresses', 2499]
+        ].map((item, index) => {
+          const [subcategory, filePrefix, price] = item;
+          const imageNumber = index < 5 ? index + 1 : ((index - 1) % 4) + 1;
+          const category = subcategory.startsWith('Men') ? 'men' : 'women';
+          const imageName = category === 'women' ? `${filePrefix} ${imageNumber}` : `${filePrefix} image ${imageNumber}`;
+          return {
+            id: index + 1,
+            name: getProductName(subcategory, price, imageNumber),
+            image: `./${imageName}.${category === 'men' ? 'avif' : 'jpg'}`,
+            price,
+            description: `Explore our ${subcategory.toLowerCase()} collection.`,
+            category,
+            subcategory,
+            featured: index < 8,
+            newArrival: index >= 4,
+            bestSeller: index % 3 !== 0,
+            trending: index % 2 === 0
+          };
+        })
       ];
 
       // Cart management
