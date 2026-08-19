@@ -394,6 +394,7 @@
           <span onclick="goHome()">Home</span>
           <span onclick="filterByCategory('men')">Men</span>
           <span onclick="filterByCategory('women')">Women</span>
+          <span onclick="filterByCategory('kids')">Kids</span>
           <span>Sale</span>
           <span onclick="location.href='blog.html'">Blog</span>
         </nav>
@@ -413,6 +414,7 @@
           <div class="filter-group">
             <label><input type="checkbox" value="men" onchange="applyFilters()"> Men</label>
             <label><input type="checkbox" value="women" onchange="applyFilters()"> Women</label>
+            <label><input type="checkbox" value="kids" onchange="applyFilters()"> Kids</label>
           </div>
 
           <div class="filter-group">
@@ -487,7 +489,31 @@
             bestSeller: index % 3 !== 0,
             trending: index % 2 === 0
           };
-        })
+        }),
+        {
+          id: 18,
+          name: 'Kids Collection',
+          image: './box 3.jpg',
+          price: 999,
+          description: 'Comfortable and stylish clothing for kids',
+          category: 'kids',
+          featured: true,
+          newArrival: true,
+          bestSeller: true,
+          trending: false
+        },
+        {
+          id: 19,
+          name: 'Kids Sports Wear',
+          image: './box 3.jpg',
+          price: 799,
+          description: 'Active wear for kids with great comfort',
+          category: 'kids',
+          featured: false,
+          newArrival: true,
+          bestSeller: true,
+          trending: false
+        }
       ];
 
       let cart = JSON.parse(localStorage.getItem('cart')) || [];
@@ -531,7 +557,7 @@
       }
 
       function applyFilters() {
-        const categoryCheckboxes = document.querySelectorAll('.filter-group input[value="men"], .filter-group input[value="women"]');
+        const categoryCheckboxes = document.querySelectorAll('.filter-group input[value="men"], .filter-group input[value="women"], .filter-group input[value="kids"]');
         const subcategoryCheckboxes = document.querySelectorAll('.filter-group input[value="Men T-Shirt"], .filter-group input[value="Men Shirt"], .filter-group input[value="Women Dresses"], .filter-group input[value="Women Ethnic Wear"]');
         const typeCheckboxes = document.querySelectorAll('.filter-group input[value="featured"], .filter-group input[value="new"], .filter-group input[value="bestseller"]');
 
