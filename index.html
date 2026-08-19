@@ -415,9 +415,9 @@
         </div>
         <nav class="nav-box" aria-label="Main navigation">
           <span onclick="goHome()">Home</span>
-          <span>Men</span>
-          <span>Women</span>
-          <span>Kids</span>
+          <span onclick="goToProducts('men')">Men</span>
+          <span onclick="goToProducts('women')">Women</span>
+          <span onclick="goToProducts('kids')">Kids</span>
           <span>Sale</span>
           <span onclick="location.href='blog.html'">Blog</span>
         </nav>
@@ -496,6 +496,17 @@
         </div>
         <section class="product-grid" id="trending-grid">
           <!-- Trending products will be inserted here -->
+        </section>
+      </div>
+
+      <!-- Kids Collection Section -->
+      <div class="section-container kids-collection-section">
+        <div class="section-header">
+          <h3>Kids Collection</h3>
+          <a class="view-all-link" onclick="goToProducts('kids')">Shop Kids →</a>
+        </div>
+        <section class="product-grid" id="kids-grid">
+          <!-- Kids products will be inserted here -->
         </section>
       </div>
 
@@ -662,7 +673,7 @@
         return `
           <article class="card" onclick="viewProduct(${product.id})">
             <img src="${product.image}" alt="${product.name}" />
-            <div class="card-overlay">
+            <div class="card-overlay" data-name="${product.name}">
               <button onclick="addToCart(${product.id}, event)">Add to Cart</button>
             </div>
           </article>
@@ -685,6 +696,9 @@
         // Trending
         const trending = allProducts.filter(p => p.trending);
         document.getElementById('trending-grid').innerHTML = trending.map(renderProductCard).join('');
+
+        const kids = allProducts.filter(p => p.category === 'kids');
+        document.getElementById('kids-grid').innerHTML = kids.map(renderProductCard).join('');
       }
 
       function addToCart(productId, event) {
@@ -713,8 +727,8 @@
         window.location.href = 'index.html';
       }
 
-      function goToProducts() {
-        window.location.href = 'products.html';
+      function goToProducts(category) {
+        window.location.href = category ? `products.html?category=${category}` : 'products.html';
       }
 
       // Initialize

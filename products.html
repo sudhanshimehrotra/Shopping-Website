@@ -535,6 +535,8 @@
         }
       }
 
+      const requestedCategory = new URLSearchParams(window.location.search).get('category');
+
       function addToCart(productId, event) {
         if (event) {
           event.stopPropagation();
@@ -558,7 +560,7 @@
 
       // Initialize
       updateCartCount();
-      renderProducts(allProducts);
+      requestedCategory ? filterByCategory(requestedCategory) : renderProducts(allProducts);
     </script>
   </body>
 </html>
