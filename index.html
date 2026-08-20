@@ -494,6 +494,23 @@
       .section-header { margin: 0 0 18px; padding: 0 0 14px; border-bottom: 1px solid var(--line); }
       .section-header h3 { color: var(--forest); font-family: Georgia, serif; font-size: 30px; font-weight: 400; }
       .view-all-link { color: var(--coral); font-size: 13px; letter-spacing: 0.08em; text-transform: uppercase; }
+      .kids-collection-section { margin-top: 10px; }
+      .kids-intro {
+        display: grid;
+        grid-template-columns: 1.2fr 1fr;
+        gap: 24px;
+        align-items: center;
+        margin-bottom: 28px;
+        padding: 30px;
+        background: var(--cream);
+        border-left: 5px solid var(--coral);
+      }
+      .kids-intro h4 { margin: 0 0 8px; color: var(--forest); font-family: Georgia, serif; font-size: 28px; font-weight: 400; }
+      .kids-intro p { margin: 0; color: var(--muted); line-height: 1.7; }
+      .kids-intro-note { color: var(--coral); font-size: 12px; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; }
+      .kids-subsection { margin-top: 28px; }
+      .kids-subsection h4 { margin: 0 0 12px; color: var(--forest); font-size: 18px; font-weight: 700; letter-spacing: 0.05em; text-transform: uppercase; }
+      .kids-subsection .product-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); margin-bottom: 0; }
       .section-container > section[style] { background: var(--cream) !important; border: 0 !important; border-radius: 0 !important; padding: 28px !important; }
       .section-container > section[style] p { color: var(--ink) !important; max-width: 780px; }
       .product-grid { grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 16px; }
@@ -518,6 +535,7 @@
         .banner-content { padding: 30px; }
         .product-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
         .card { min-height: 260px; }
+        .kids-intro { grid-template-columns: 1fr; padding: 24px; }
       }
     </style>
   </head>
@@ -619,8 +637,23 @@
           <h3>Kids Collection</h3>
           <a class="view-all-link" onclick="goToProducts('kids')">Shop Kids →</a>
         </div>
-        <section class="product-grid" id="kids-grid">
-          <!-- Kids products will be inserted here -->
+        <section class="kids-intro">
+          <div>
+            <div class="kids-intro-note">Made for little moments</div>
+            <h4>Playful style, made to move</h4>
+            <p>Discover bright, comfortable looks for celebrations, playdates, and every adventure in between.</p>
+          </div>
+          <div>
+            <p><strong>Two moods. One joyful wardrobe.</strong><br />Choose traditional charm in Ethnic Wear or easy everyday favourites in Casual.</p>
+          </div>
+        </section>
+        <section class="kids-subsection" aria-labelledby="ethnic-kids-heading">
+          <h4 id="ethnic-kids-heading">Ethnic Wear</h4>
+          <div class="product-grid" id="kids-ethnic-grid"></div>
+        </section>
+        <section class="kids-subsection" aria-labelledby="casual-kids-heading">
+          <h4 id="casual-kids-heading">Casual</h4>
+          <div class="product-grid" id="kids-casual-grid"></div>
         </section>
       </div>
 
@@ -721,16 +754,18 @@
           ['Men T-Shirt', 'Men Tshirt', 899], ['Men T-Shirt', 'Men Tshirt', 999], ['Men T-Shirt', 'Men Tshirt', 1099], ['Men T-Shirt', 'Men Tshirt', 1199], ['Men T-Shirt', 'Men Tshirt', 1299],
           ['Men Shirt', 'Men Shirt', 1399], ['Men Shirt', 'Men Shirt', 1499], ['Men Shirt', 'Men Shirt', 1599], ['Men Shirt', 'Men Shirt', 1699],
           ['Women Dresses', 'Women Dresses', 1799], ['Women Dresses', 'Women Dresses', 1899], ['Women Dresses', 'Women Dresses', 1999], ['Women Dresses', 'Women Dresses', 2099],
-          ['Women Ethnic Wear', 'Women ethnic Dresses', 2199], ['Women Ethnic Wear', 'Women ethnic Dresses', 2299], ['Women Ethnic Wear', 'Women ethnic Dresses', 2399], ['Women Ethnic Wear', 'Women ethnic Dresses', 2499]
+          ['Women Ethnic Wear', 'Women ethnic Dresses', 2199], ['Women Ethnic Wear', 'Women ethnic Dresses', 2299], ['Women Ethnic Wear', 'Women ethnic Dresses', 2399], ['Women Ethnic Wear', 'Women ethnic Dresses', 2499],
+          ['Kids Ethnic Wear', 'Ethnic kids wear', 1299, 'avif'], ['Kids Ethnic Wear', 'Ethnic kids wear 2', 1399, 'webp'],
+          ['Kids Casual', 'kids wear', 899, 'jpg'], ['Kids Casual', 'Kids wear', 999, 'webp']
         ].map((item, index) => {
-          const [subcategory, filePrefix, price] = item;
+          const [subcategory, filePrefix, price, fileExtension] = item;
           const imageNumber = index < 5 ? index + 1 : ((index - 1) % 4) + 1;
-          const category = subcategory.startsWith('Men') ? 'men' : 'women';
-          const imageName = category === 'women' ? `${filePrefix} ${imageNumber}` : `${filePrefix} image ${imageNumber}`;
+          const category = subcategory.startsWith('Men') ? 'men' : subcategory.startsWith('Kids') ? 'kids' : 'women';
+          const imageName = fileExtension ? filePrefix : category === 'women' ? `${filePrefix} ${imageNumber}` : `${filePrefix} image ${imageNumber}`;
           return {
             id: index + 1,
             name: getProductName(subcategory, price, imageNumber),
-            image: `./${imageName}.${category === 'men' ? 'avif' : 'jpg'}`,
+            image: `./${imageName}.${fileExtension || (category === 'men' ? 'avif' : 'jpg')}`,
             price,
             description: `Explore our ${subcategory.toLowerCase()} collection.`,
             category,
@@ -779,8 +814,11 @@
         const trending = allProducts.filter(p => p.trending);
         document.getElementById('trending-grid').innerHTML = trending.map(renderProductCard).join('');
 
-        const kids = allProducts.filter(p => p.category === 'kids');
-        document.getElementById('kids-grid').innerHTML = kids.map(renderProductCard).join('');
+        const kidsEthnic = allProducts.filter(p => p.subcategory === 'Kids Ethnic Wear');
+        document.getElementById('kids-ethnic-grid').innerHTML = kidsEthnic.map(renderProductCard).join('');
+
+        const kidsCasual = allProducts.filter(p => p.subcategory === 'Kids Casual');
+        document.getElementById('kids-casual-grid').innerHTML = kidsCasual.map(renderProductCard).join('');
       }
 
       function addToCart(productId, event) {
