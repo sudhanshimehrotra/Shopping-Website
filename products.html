@@ -317,6 +317,71 @@
           grid-template-columns: repeat(2, 1fr);
         }
       }
+
+      /* Editorial catalog layer */
+      :root {
+        --ink: #172321;
+        --muted: #64716d;
+        --paper: #f8f6f1;
+        --cream: #eee8dc;
+        --forest: #173f3a;
+        --coral: #d56b4f;
+        --line: rgba(23, 35, 33, 0.13);
+      }
+
+      body {
+        background: var(--paper);
+        color: var(--ink);
+        font-family: "Trebuchet MS", "Segoe UI", sans-serif;
+      }
+
+      .page { width: min(1240px, calc(100% - 48px)); margin: 24px auto 48px; }
+      .topbar { grid-template-columns: 190px 1fr auto; min-height: 76px; margin-bottom: 34px; padding: 10px 14px; background: rgba(255,255,255,0.72); border: 1px solid var(--line); border-radius: 18px; box-shadow: 0 12px 30px rgba(23,35,33,0.06); }
+      .logo-box { justify-content: flex-start; padding: 8px; }
+      .logo-box, .nav-box { min-height: 56px; background: transparent; border: 0; }
+      .logo-box img { max-height: 56px; }
+      .nav-box { justify-content: center; align-items: center; gap: 8px; padding: 8px; }
+      .nav-box span { color: var(--ink); border-radius: 10px; padding: 10px 14px; }
+      .nav-box span:hover { color: var(--coral); background: var(--cream); }
+      .cart-icon { min-height: 56px; padding: 10px 14px; color: var(--forest); border-radius: 12px; }
+      .cart-icon:hover { background: var(--cream); }
+      .cart-badge { background: var(--coral); }
+      .title { margin: 0 0 28px; color: var(--forest); font-family: Georgia, serif; font-size: clamp(42px, 6vw, 72px); font-weight: 400; letter-spacing: -0.02em; }
+      .products-wrapper { grid-template-columns: 230px 1fr; gap: 28px; align-items: start; }
+      .sidebar { top: 22px; padding: 22px; background: var(--forest); color: #fffaf2; border: 0; border-radius: 16px; box-shadow: 0 16px 30px rgba(23,35,33,0.12); }
+      .sidebar h3 { color: #fffaf2; border-bottom-color: var(--coral); font-family: Georgia, serif; font-size: 22px; font-weight: 400; }
+      .filter-group strong { color: #f1c9af; font-size: 12px; letter-spacing: 0.12em; text-transform: uppercase; }
+      .filter-group label { color: #e6eeeb; }
+      .filter-group input { accent-color: var(--coral); }
+      .clear-filters { margin-top: 6px; background: #fffaf2; color: var(--forest); border-radius: 999px; padding: 11px 12px; }
+      .clear-filters:hover { background: var(--coral); color: #fff; }
+      .products-section { padding: 0; background: transparent; border: 0; }
+      .products-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 18px; }
+      .product-card { background: #fff; border: 1px solid var(--line); border-radius: 14px; box-shadow: 0 8px 20px rgba(23,35,33,0.05); }
+      .product-card:hover { transform: translateY(-5px); box-shadow: 0 18px 32px rgba(23,35,33,0.13); }
+      .product-image-wrapper { height: 270px; background: var(--cream); }
+      .product-image { object-fit: cover; }
+      .add-to-cart-overlay { background: rgba(23,63,58,0.72); }
+      .add-cart-btn-overlay { background: var(--coral); border-radius: 999px; }
+      .add-cart-btn-overlay:hover { background: #bd533b; }
+      .product-info { padding: 16px; }
+      .product-category { color: var(--coral); font-size: 11px; font-weight: 700; letter-spacing: 0.12em; }
+      .product-name { color: var(--ink); font-family: Georgia, serif; font-size: 19px; font-weight: 400; }
+      .product-description { color: var(--muted); }
+      .product-price { color: var(--forest); font-size: 20px; }
+      .no-products { padding: 72px 30px; background: var(--cream); border-radius: 14px; }
+
+      @media (max-width: 760px) {
+        .page { width: min(100% - 28px, 620px); margin-top: 14px; }
+        .topbar { grid-template-columns: 1fr auto; }
+        .nav-box { grid-column: 1 / -1; grid-row: 2; justify-content: flex-start; overflow-x: auto; }
+        .products-wrapper { grid-template-columns: 1fr; }
+        .sidebar { position: static; }
+        .products-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
+        .product-image-wrapper { height: 210px; }
+        .product-info { padding: 12px; }
+        .product-name { font-size: 16px; }
+      }
     </style>
   </head>
   <body>
@@ -353,6 +418,14 @@
           </div>
 
           <div class="filter-group">
+            <strong>Collection</strong>
+            <label><input type="checkbox" value="Men T-Shirt" onchange="applyFilters()"> Men T-Shirts</label>
+            <label><input type="checkbox" value="Men Shirt" onchange="applyFilters()"> Men Shirts</label>
+            <label><input type="checkbox" value="Women Dresses" onchange="applyFilters()"> Women Dresses</label>
+            <label><input type="checkbox" value="Women Ethnic Wear" onchange="applyFilters()"> Women Ethnic Wear</label>
+          </div>
+
+          <div class="filter-group">
             <label><input type="checkbox" value="featured" onchange="applyFilters()"> Featured</label>
             <label><input type="checkbox" value="new" onchange="applyFilters()"> New Arrivals</label>
             <label><input type="checkbox" value="bestseller" onchange="applyFilters()"> Best Sellers</label>
@@ -374,75 +447,96 @@
     </div>
 
     <script>
-      // All products data
+      // Product catalog grouped by gender and collection.
+      function getProductName(subcategory, price, imageNumber) {
+        const namedProducts = {
+          'Men T-Shirt-899': 'Men White T-Shirt',
+          'Men T-Shirt-999': 'Men Light Brown Simple T-Shirt',
+          'Men T-Shirt-1099': 'Men Brown T-Shirt',
+          'Men T-Shirt-1199': 'Men Casual T-Shirt',
+          'Men T-Shirt-1299': 'Men Casual Tshirt',
+          'Men Shirt-1399': 'Men Maroon Shirt',
+          'Men Shirt-1499': 'Men Blue Shirt',
+          'Men Shirt-1599': 'Men Party Wear Black Shirt',
+          'Men Shirt-1699': 'Men Formal Brown Shirt',
+          'Women Dresses-1799': 'Women Floral Dress',
+          'Women Dresses-1899': 'Women A Line Dress'
+        };
+        return namedProducts[`${subcategory}-${price}`] || (subcategory === 'Women Dresses' || subcategory === 'Women Ethnic Wear' ? subcategory : `${subcategory} ${imageNumber}`);
+      }
+
       const allProducts = [
+        ...[
+          ['Men T-Shirt', 'Men Tshirt', 899], ['Men T-Shirt', 'Men Tshirt', 999], ['Men T-Shirt', 'Men Tshirt', 1099], ['Men T-Shirt', 'Men Tshirt', 1199], ['Men T-Shirt', 'Men Tshirt', 1299],
+          ['Men Shirt', 'Men Shirt', 1399], ['Men Shirt', 'Men Shirt', 1499], ['Men Shirt', 'Men Shirt', 1599], ['Men Shirt', 'Men Shirt', 1699],
+          ['Women Dresses', 'Women Dresses', 1799], ['Women Dresses', 'Women Dresses', 1899], ['Women Dresses', 'Women Dresses', 1999], ['Women Dresses', 'Women Dresses', 2099],
+          ['Women Ethnic Wear', 'Women ethnic Dresses', 2199], ['Women Ethnic Wear', 'Women ethnic Dresses', 2299], ['Women Ethnic Wear', 'Women ethnic Dresses', 2399], ['Women Ethnic Wear', 'Women ethnic Dresses', 2499]
+        ].map((item, index) => {
+          const [subcategory, filePrefix, price] = item;
+          const imageNumber = index < 5 ? index + 1 : ((index - 1) % 4) + 1;
+          const category = subcategory.startsWith('Men') ? 'men' : 'women';
+          const imageName = category === 'women' ? `${filePrefix} ${imageNumber}` : `${filePrefix} image ${imageNumber}`;
+          return {
+            id: index + 1,
+            name: getProductName(subcategory, price, imageNumber),
+            image: `./${imageName}.${category === 'men' ? 'avif' : 'jpg'}`,
+            price,
+            description: `Explore our ${subcategory.toLowerCase()} collection.`,
+            category,
+            subcategory,
+            featured: index < 8,
+            newArrival: index >= 4,
+            bestSeller: index % 3 !== 0,
+            trending: index % 2 === 0
+          };
+        }),
         {
-          id: 1,
-          name: "Premium Men's Fashion",
-          image: './Box 1.jpg',
-          price: 1999,
-          description: 'Premium quality men\'s fashion collection with latest trends',
-          category: 'men',
+          id: 18,
+          name: 'Kids Ethnic Wear',
+          image: './Ethnic kids wear.avif',
+          price: 1299,
+          description: 'Festive ethnic styles made for kids',
+          category: 'kids',
+          subcategory: 'Kids Ethnic Wear',
+          featured: true,
+          newArrival: true,
+          bestSeller: true,
+          trending: true
+        },
+        {
+          id: 19,
+          name: 'Kids Ethnic Wear 2',
+          image: './Ethnic kids wear 2.webp',
+          price: 1399,
+          description: 'Bright traditional looks for special occasions',
+          category: 'kids',
+          subcategory: 'Kids Ethnic Wear',
           featured: true,
           newArrival: true,
           bestSeller: false,
           trending: true
         },
         {
-          id: 2,
-          name: "Women's Essentials",
-          image: './box 2.jpg',
-          price: 2499,
-          description: 'Beautiful women\'s collection for every occasion',
-          category: 'women',
-          featured: true,
-          newArrival: false,
-          bestSeller: true,
-          trending: true
-        },
-        {
-          id: 3,
-          name: "Kids Collection",
-          image: './box 3.jpg',
-          price: 999,
-          description: 'Comfortable and stylish clothing for kids',
+          id: 20,
+          name: 'Kids Casual Wear',
+          image: './kids wear.jpg',
+          price: 899,
+          description: 'Easy everyday outfits for active kids',
           category: 'kids',
-          featured: true,
+          subcategory: 'Kids Casual',
+          featured: false,
           newArrival: true,
           bestSeller: true,
           trending: false
         },
         {
-          id: 4,
-          name: "Summer Dress Collection",
-          image: './box 2.jpg',
-          price: 1599,
-          description: 'Lightweight and comfortable summer dresses',
-          category: 'women',
-          featured: false,
-          newArrival: true,
-          bestSeller: false,
-          trending: true
-        },
-        {
-          id: 5,
-          name: "Casual Men's Wear",
-          image: './Box 1.jpg',
-          price: 1299,
-          description: 'Casual and comfortable men\'s clothing line',
-          category: 'men',
-          featured: false,
-          newArrival: false,
-          bestSeller: true,
-          trending: true
-        },
-        {
-          id: 6,
-          name: "Kids Sports Wear",
-          image: './box 3.jpg',
-          price: 799,
-          description: 'Active wear for kids with great comfort',
+          id: 21,
+          name: 'Kids Casual Wear 2',
+          image: './Kids wear.webp',
+          price: 999,
+          description: 'Comfortable casual styles for every adventure',
           category: 'kids',
+          subcategory: 'Kids Casual',
           featured: false,
           newArrival: true,
           bestSeller: true,
@@ -453,6 +547,7 @@
       let cart = JSON.parse(localStorage.getItem('cart')) || [];
       let activeFilters = {
         categories: [],
+        subcategories: [],
         types: []
       };
 
@@ -491,9 +586,14 @@
 
       function applyFilters() {
         const categoryCheckboxes = document.querySelectorAll('.filter-group input[value="men"], .filter-group input[value="women"], .filter-group input[value="kids"]');
+        const subcategoryCheckboxes = document.querySelectorAll('.filter-group input[value="Men T-Shirt"], .filter-group input[value="Men Shirt"], .filter-group input[value="Women Dresses"], .filter-group input[value="Women Ethnic Wear"]');
         const typeCheckboxes = document.querySelectorAll('.filter-group input[value="featured"], .filter-group input[value="new"], .filter-group input[value="bestseller"]');
 
         activeFilters.categories = Array.from(categoryCheckboxes)
+          .filter(cb => cb.checked)
+          .map(cb => cb.value);
+
+        activeFilters.subcategories = Array.from(subcategoryCheckboxes)
           .filter(cb => cb.checked)
           .map(cb => cb.value);
 
@@ -503,6 +603,7 @@
 
         const filtered = allProducts.filter(product => {
           let categoryMatch = activeFilters.categories.length === 0 || activeFilters.categories.includes(product.category);
+          let subcategoryMatch = activeFilters.subcategories.length === 0 || activeFilters.subcategories.includes(product.subcategory);
           
           let typeMatch = true;
           if (activeFilters.types.length > 0) {
@@ -514,7 +615,7 @@
             });
           }
 
-          return categoryMatch && typeMatch;
+          return categoryMatch && subcategoryMatch && typeMatch;
         });
 
         renderProducts(filtered);
@@ -522,7 +623,7 @@
 
       function clearAllFilters() {
         document.querySelectorAll('.filter-group input').forEach(cb => cb.checked = false);
-        activeFilters = { categories: [], types: [] };
+        activeFilters = { categories: [], subcategories: [], types: [] };
         renderProducts(allProducts);
       }
 
