@@ -3,7 +3,10 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="Sign in to your Chaddha Fashion account." />
     <title>Login | Chaddha Fashion</title>
+    <link rel="icon" href="./chaddha-logo.svg" type="image/svg+xml" />
+    <link rel="stylesheet" href="./shop.css" />
     <style>
       :root {
         --bg: #f7f1ee;
@@ -199,7 +202,7 @@
           <button type="submit" class="login-btn">Login to Shop</button>
 
           <div class="demo">
-            Demo access: use any valid email and password to continue.
+            Accounts are stored on the server. Create an account first, then log in.
           </div>
 
           <div class="signup-note">
@@ -209,34 +212,77 @@
       </div>
     </div>
 
+    <script src="./shop-data.js"></script>
+    <script src="./shop.js"></script>
     <script>
       const loginForm = document.getElementById('loginForm');
+      const loginButton = loginForm.querySelector('.login-btn');
 
-      loginForm.addEventListener('submit', function (event) {
+      Shop.watchFieldsForRepair(loginForm);
+
+      // If something bounced us here, go back there after a good login.
+      function destinationAfterLogin() {
+        const next = new URLSearchParams(window.location.search).get('next');
+        // Only same-site page names, so this cannot be pointed elsewhere.
+        if (next && /^[\w.-]+\.html(\?[^#]*)?$/.test(next)) return next;
+        return 'index.html';
+      }
+
+      loginForm.addEventListener('submit', async function (event) {
         event.preventDefault();
+        Shop.clearFieldErrors(loginForm);
 
-        const email = document.getElementById('email').value.trim().toLowerCase();
-        const password = document.getElementById('password').value.trim();
+        const email = document.getElementById('email').value.trim();
+        const password = document.getElementById('password').value;
 
-        if (!email || !password) {
-          alert('Please enter both email and password.');
-          return;
+        let problems = 0;
+        if (!email) {
+          Shop.showFieldError('email', 'Please enter your email address.');
+          problems += 1;
+        } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email)) {
+          Shop.showFieldError('email', 'That email address does not look right.');
+          problems += 1;
         }
-
-        const users = JSON.parse(localStorage.getItem('chaddha_users') || '[]');
-        const matchedUser = users.find(user => user.email.toLowerCase() === email && user.password === password);
-
-        if (!matchedUser) {
-          alert('Invalid email or password. Please create an account first or try again.');
-          return;
+        if (!password) {
+          Shop.showFieldError('password', 'Please enter your password.');
+          problems += 1;
         }
+        if (problems > 0) return;
 
-        localStorage.setItem('chaddha_logged_in', 'true');
-        localStorage.setItem('chaddha_user_email', email);
-        localStorage.setItem('chaddha_user_password', password);
+        loginButton.disabled = true;
+        loginButton.textContent = 'Signing you in…';
 
-        alert('Login successful! Redirecting to Chaddha Fashion Store.');
-        window.location.href = 'index.html';
+        try {
+          // Send the details to our Node server and wait for its answer.
+          const response = await fetch('/api/login', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ email, password })
+          });
+
+          const data = await response.json();
+
+          if (!response.ok) {
+            // The server deliberately does not say which half was wrong,
+            // so the message goes under the password field.
+            Shop.showFieldError('password', data.error || 'Login failed. Please try again.');
+            Shop.toast(data.error || 'Login failed.', 'error');
+            return;
+          }
+
+          // The server gave us a token that proves we are logged in.
+          localStorage.setItem('chaddha_token', data.token);
+
+          Shop.toast('Welcome back, ' + (data.fullName || 'friend') + '!', 'success');
+          setTimeout(() => {
+            window.location.href = destinationAfterLogin();
+          }, 700);
+        } catch (error) {
+          Shop.toast('Could not reach the server. Is it running on port 3000?', 'error');
+        } finally {
+          loginButton.disabled = false;
+          loginButton.textContent = 'Login to Shop';
+        }
       });
     </script>
   </body>

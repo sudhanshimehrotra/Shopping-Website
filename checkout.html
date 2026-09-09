@@ -3,7 +3,10 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="Complete your Chaddha Fashion order." />
     <title>Checkout - Chaddha Fashion</title>
+    <link rel="icon" href="./chaddha-logo.svg" type="image/svg+xml" />
+    <link rel="stylesheet" href="./shop.css" />
     <style>
       :root {
         --bg: #f7f1ee;
@@ -31,7 +34,7 @@
 
       .topbar {
         display: grid;
-        grid-template-columns: 1.2fr 3.5fr 0.3fr;
+        grid-template-columns: 170px 1fr auto;
         align-items: center;
         gap: 16px;
         margin-bottom: 18px;
@@ -57,25 +60,47 @@
 
       .nav-box {
         display: flex;
-        gap: 28px;
+        align-items: center;
+        gap: 18px;
         font-weight: 600;
         color: var(--muted);
         text-transform: uppercase;
         font-size: 14px;
       }
 
-      .nav-box span {
+      .nav-box a {
+        color: var(--muted);
+        text-decoration: none;
         cursor: pointer;
         transition: color 0.3s;
       }
 
-      .nav-box span:hover {
+      .nav-box a:hover {
         color: var(--accent);
       }
 
       .cart-icon {
+        position: relative;
         font-size: 28px;
         cursor: pointer;
+        text-decoration: none;
+      }
+
+      .cart-badge {
+        position: absolute;
+        top: -8px;
+        right: -10px;
+        background: var(--accent);
+        color: white;
+        border-radius: 999px;
+        min-width: 22px;
+        height: 22px;
+        padding: 0 5px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 12px;
+        font-weight: bold;
       }
 
       .title {
@@ -88,6 +113,7 @@
         display: grid;
         grid-template-columns: 2fr 1fr;
         gap: 20px;
+        align-items: start;
       }
 
       .checkout-section {
@@ -95,12 +121,13 @@
         border: 1px solid rgba(0, 0, 0, 0.08);
         border-radius: 4px;
         padding: 24px;
+        margin-bottom: 20px;
       }
 
       .section-title {
         font-size: 20px;
         font-weight: 700;
-        margin-bottom: 16px;
+        margin: 0 0 16px;
         border-bottom: 2px solid var(--accent);
         padding-bottom: 12px;
       }
@@ -141,11 +168,23 @@
         gap: 12px;
       }
 
+      .demo-note {
+        margin: 0 0 18px;
+        padding: 12px 14px;
+        border-left: 4px solid var(--accent);
+        background: var(--panel);
+        color: var(--text);
+        font-size: 13px;
+        line-height: 1.6;
+      }
+
       .order-summary {
         background: white;
         border: 1px solid rgba(0, 0, 0, 0.08);
         border-radius: 4px;
         padding: 20px;
+        position: sticky;
+        top: 20px;
       }
 
       .order-item {
@@ -156,15 +195,16 @@
         border-bottom: 1px solid #eee;
       }
 
-      .order-item:last-child {
+      .order-item:last-of-type {
         border-bottom: none;
       }
 
       .order-item img {
-        width: 80px;
-        height: 80px;
+        width: 70px;
+        height: 84px;
         object-fit: cover;
         border-radius: 4px;
+        background: var(--panel);
       }
 
       .item-info {
@@ -180,16 +220,19 @@
         margin: 0;
         color: var(--muted);
         font-size: 12px;
+        line-height: 1.5;
       }
 
       .item-price {
         font-weight: 600;
         color: var(--accent);
+        white-space: nowrap;
       }
 
       .order-summary-row {
         display: flex;
         justify-content: space-between;
+        gap: 12px;
         margin-bottom: 12px;
         font-size: 14px;
       }
@@ -215,8 +258,13 @@
         transition: background 0.3s;
       }
 
-      .place-order-btn:hover {
+      .place-order-btn:hover:not(:disabled) {
         background: #ff2d7d;
+      }
+
+      .place-order-btn:disabled {
+        background: #ccc;
+        cursor: not-allowed;
       }
 
       .back-btn {
@@ -228,16 +276,8 @@
         border-radius: 4px;
         font-weight: 600;
         margin-bottom: 16px;
-      }
-
-      .logout-btn {
-        background: var(--accent);
-        color: white;
-        border: none;
-        border-radius: 8px;
-        padding: 8px 12px;
-        font-weight: 700;
-        cursor: pointer;
+        text-decoration: none;
+        display: inline-block;
       }
 
       .back-btn:hover {
@@ -245,9 +285,47 @@
         color: white;
       }
 
+      .logout-btn {
+        background: var(--accent);
+        color: white;
+        border: none;
+        border-radius: 8px;
+        padding: 10px 14px;
+        font-weight: 700;
+        cursor: pointer;
+      }
+
+      .user-actions {
+        display: flex;
+        align-items: center;
+        gap: 14px;
+        padding-right: 8px;
+      }
+
       @media (max-width: 960px) {
         .checkout-wrapper {
           grid-template-columns: 1fr;
+        }
+
+        .order-summary {
+          position: static;
+        }
+      }
+
+      @media (max-width: 760px) {
+        .topbar {
+          grid-template-columns: 1fr auto;
+        }
+
+        .nav-box {
+          grid-column: 1 / -1;
+          grid-row: 2;
+          overflow-x: auto;
+        }
+
+        .user-actions {
+          grid-column: 2;
+          grid-row: 1;
         }
       }
     </style>
@@ -255,20 +333,23 @@
   <body>
     <div class="page">
       <header class="topbar">
-        <div class="logo-box" onclick="goHome()">
+        <div class="logo-box" onclick="location.href='index.html'">
           <img src="./chaddha-logo.svg" alt="Chaddha Fashion logo" />
         </div>
-        <nav class="nav-box">
-          <span onclick="goHome()">Home</span>
-          <span>Men</span>
-          <span>Women</span>
-          <span>Kids</span>
-          <span>Sale</span>
-          <span onclick="location.href='blog.html'">Blog</span>
+        <nav class="nav-box" aria-label="Main navigation">
+          <a href="index.html">Home</a>
+          <a href="products.html?category=men">Men</a>
+          <a href="products.html?category=women">Women</a>
+          <a href="products.html?category=kids">Kids</a>
+          <a href="orders.html">Orders</a>
+          <a href="blog.html">Blog</a>
         </nav>
-        <div style="display:flex; align-items:center; gap:10px;">
-          <div class="cart-icon" onclick="goToCart()">🛒</div>
-          <button class="logout-btn" onclick="logoutUser()">Logout</button>
+        <div class="user-actions">
+          <a class="cart-icon" href="cart.html" aria-label="Shopping cart">
+            🛒
+            <span class="cart-badge" data-cart-count>0</span>
+          </a>
+          <button class="logout-btn" type="button" data-logout>Logout</button>
         </div>
       </header>
 
@@ -276,45 +357,45 @@
 
       <div class="checkout-wrapper">
         <div>
-          <button class="back-btn" onclick="goToCart()">← Back to Cart</button>
+          <a class="back-btn" href="cart.html">← Back to Cart</a>
 
           <!-- Shipping Address -->
           <div class="checkout-section">
             <h2 class="section-title">Shipping Address</h2>
             <div class="form-group">
-              <label>Full Name *</label>
-              <input type="text" id="fullName" placeholder="Enter your full name" required />
+              <label for="fullName">Full Name *</label>
+              <input type="text" id="fullName" placeholder="Enter your full name" autocomplete="name" required />
             </div>
             <div class="form-group">
-              <label>Email Address *</label>
-              <input type="email" id="email" placeholder="Enter your email" required />
+              <label for="email">Email Address *</label>
+              <input type="email" id="email" placeholder="Enter your email" autocomplete="email" required />
             </div>
             <div class="form-group">
-              <label>Phone Number *</label>
-              <input type="tel" id="phone" placeholder="Enter your phone number" required />
+              <label for="phone">Phone Number *</label>
+              <input type="tel" id="phone" placeholder="10-digit mobile number" autocomplete="tel" required />
             </div>
             <div class="form-group">
-              <label>Street Address *</label>
-              <input type="text" id="address" placeholder="Enter your street address" required />
+              <label for="address">Street Address *</label>
+              <input type="text" id="address" placeholder="Enter your street address" autocomplete="street-address" required />
             </div>
             <div class="form-row">
               <div class="form-group">
-                <label>City *</label>
-                <input type="text" id="city" placeholder="City" required />
+                <label for="city">City *</label>
+                <input type="text" id="city" placeholder="City" autocomplete="address-level2" required />
               </div>
               <div class="form-group">
-                <label>State *</label>
-                <input type="text" id="state" placeholder="State" required />
+                <label for="state">State *</label>
+                <input type="text" id="state" placeholder="State" autocomplete="address-level1" required />
               </div>
             </div>
             <div class="form-row">
               <div class="form-group">
-                <label>Postal Code *</label>
-                <input type="text" id="postal" placeholder="Postal code" required />
+                <label for="postal">Postal Code *</label>
+                <input type="text" id="postal" placeholder="6-digit PIN code" autocomplete="postal-code" required />
               </div>
               <div class="form-group">
-                <label>Country *</label>
-                <input type="text" id="country" placeholder="Country" value="India" required />
+                <label for="country">Country *</label>
+                <input type="text" id="country" placeholder="Country" value="India" autocomplete="country-name" required />
               </div>
             </div>
           </div>
@@ -322,22 +403,27 @@
           <!-- Payment Information -->
           <div class="checkout-section">
             <h2 class="section-title">Payment Information</h2>
+            <p class="demo-note">
+              <strong>Demo store — please do not enter a real card.</strong>
+              Nothing is charged and no card details are sent anywhere. Any 13 to 19 digit
+              number will do, for example 4111 1111 1111 1111.
+            </p>
             <div class="form-group">
-              <label>Cardholder Name *</label>
+              <label for="cardName">Cardholder Name *</label>
               <input type="text" id="cardName" placeholder="Name on card" required />
             </div>
             <div class="form-group">
-              <label>Card Number *</label>
-              <input type="text" id="cardNumber" placeholder="1234 5678 9012 3456" maxlength="19" required />
+              <label for="cardNumber">Card Number *</label>
+              <input type="text" id="cardNumber" placeholder="1234 5678 9012 3456" maxlength="23" inputmode="numeric" required />
             </div>
             <div class="form-row">
               <div class="form-group">
-                <label>Expiry Date *</label>
-                <input type="text" id="expiry" placeholder="MM/YY" maxlength="5" required />
+                <label for="expiry">Expiry Date *</label>
+                <input type="text" id="expiry" placeholder="MM/YY" maxlength="5" inputmode="numeric" required />
               </div>
               <div class="form-group">
-                <label>CVV *</label>
-                <input type="text" id="cvv" placeholder="123" maxlength="3" required />
+                <label for="cvv">CVV *</label>
+                <input type="text" id="cvv" placeholder="123" maxlength="4" inputmode="numeric" required />
               </div>
             </div>
           </div>
@@ -349,7 +435,7 @@
           <div id="order-items"></div>
 
           <div class="order-summary-row">
-            <span>Subtotal:</span>
+            <span id="subtotal-label">Subtotal:</span>
             <span id="subtotal-price">₹0</span>
           </div>
           <div class="order-summary-row">
@@ -365,153 +451,224 @@
             <span id="total-price">₹0</span>
           </div>
 
-          <button class="place-order-btn" onclick="placeOrder()">Place Order</button>
+          <button class="place-order-btn" type="button" id="place-order-btn">Place Order</button>
         </div>
       </div>
     </div>
 
+    <script src="./shop-data.js"></script>
+    <script src="./shop.js"></script>
     <script>
-      function checkLogin() {
-        const loggedIn = localStorage.getItem('chaddha_logged_in');
-        if (loggedIn !== 'true') {
-          window.location.href = 'login.html';
-          return false;
-        }
-        return true;
-      }
+      Shop.initHeader();
+      Shop.watchFieldsForRepair();
 
-      function logoutUser() {
-        localStorage.removeItem('chaddha_logged_in');
-        localStorage.removeItem('chaddha_user_email');
-        localStorage.removeItem('chaddha_user_password');
-        window.location.href = 'login.html';
-      }
+      // Pre-fill the name and email from the signed-in account, then keep
+      // going: the summary below does not depend on the answer.
+      Shop.requireLogin().then(user => {
+        if (!user) return;
+        const nameField = document.getElementById('fullName');
+        const emailField = document.getElementById('email');
+        if (nameField && !nameField.value) nameField.value = user.fullName || '';
+        if (emailField && !emailField.value) emailField.value = user.email || '';
+      });
 
-      checkLogin();
+      renderOrderItems();
+      updateOrderSummary();
 
-      // Get cart from localStorage
-      let cart = JSON.parse(localStorage.getItem('cart')) || [];
+      document.getElementById('place-order-btn').addEventListener('click', placeOrder);
 
-      const SHIPPING_COST = 99;
-      const TAX_RATE = 0.10;
+      // Card number formatting, purely so it is easier to read while typing.
+      document.getElementById('cardNumber').addEventListener('input', event => {
+        const digits = event.target.value.replace(/\D/g, '').slice(0, 19);
+        event.target.value = digits.replace(/(.{4})/g, '$1 ').trim();
+      });
+
+      // MM/YY gets its slash inserted for you.
+      document.getElementById('expiry').addEventListener('input', event => {
+        const digits = event.target.value.replace(/\D/g, '').slice(0, 4);
+        event.target.value = digits.length > 2 ? digits.slice(0, 2) + '/' + digits.slice(2) : digits;
+      });
 
       function renderOrderItems() {
+        const lines = Shop.cartLines();
         const container = document.getElementById('order-items');
-        
-        if (cart.length === 0) {
-          container.innerHTML = '<p>Your cart is empty</p>';
+
+        if (lines.length === 0) {
+          container.innerHTML =
+            '<p style="color: var(--muted); font-size: 14px;">Your cart is empty. ' +
+            '<a href="products.html">Browse products</a> to get started.</p>';
+          document.getElementById('place-order-btn').disabled = true;
           return;
         }
 
-        container.innerHTML = cart.map(item => `
-          <div class="order-item">
-            <img src="${item.image}" alt="${item.name}" />
-            <div class="item-info">
-              <h5>${item.name}</h5>
-              <p>${item.description}</p>
-            </div>
-            <div class="item-price">₹${item.price}</div>
-          </div>
-        `).join('');
+        container.innerHTML = lines
+          .map(
+            line =>
+              '<div class="order-item">' +
+              '<img src="' + line.image + '" alt="' + line.name + '" />' +
+              '<div class="item-info">' +
+              '<h5>' + line.name + '</h5>' +
+              '<p>Size ' + line.size + '<br />Qty ' + line.quantity + ' × ' + Shop.money(line.price) + '</p>' +
+              '</div>' +
+              '<div class="item-price">' + Shop.money(line.lineTotal) + '</div>' +
+              '</div>'
+          )
+          .join('');
       }
 
       function updateOrderSummary() {
-        const subtotal = cart.reduce((sum, item) => sum + item.price, 0);
-        const shipping = cart.length > 0 ? SHIPPING_COST : 0;
-        const tax = subtotal * TAX_RATE;
-        const total = subtotal + shipping + tax;
-
-        document.getElementById('subtotal-price').textContent = `₹${subtotal}`;
-        document.getElementById('shipping-price').textContent = `₹${shipping}`;
-        document.getElementById('tax-price').textContent = `₹${Math.round(tax)}`;
-        document.getElementById('total-price').textContent = `₹${Math.round(total)}`;
+        const totals = Shop.totals();
+        document.getElementById('subtotal-label').textContent =
+          'Subtotal (' + totals.count + ' item' + (totals.count === 1 ? '' : 's') + '):';
+        document.getElementById('subtotal-price').textContent = Shop.money(totals.subtotal);
+        document.getElementById('shipping-price').textContent = Shop.money(totals.shipping);
+        document.getElementById('tax-price').textContent = Shop.money(totals.tax);
+        document.getElementById('total-price').textContent = Shop.money(totals.total);
       }
 
+      // Checks every field and marks all the problems at once, rather than
+      // interrupting with one alert box at a time.
       function validateForm() {
-        const requiredFields = ['fullName', 'email', 'phone', 'address', 'city', 'state', 'postal', 'country', 'cardName', 'cardNumber', 'expiry', 'cvv'];
-        
-        for (let field of requiredFields) {
-          const value = document.getElementById(field).value.trim();
-          if (!value) {
-            alert(`Please fill in the ${field.replace(/([A-Z])/g, ' $1').toLowerCase()} field`);
-            return false;
+        Shop.clearFieldErrors();
+
+        const required = [
+          ['fullName', 'Please enter your full name.'],
+          ['email', 'Please enter your email address.'],
+          ['phone', 'Please enter a phone number.'],
+          ['address', 'Please enter your street address.'],
+          ['city', 'Please enter your city.'],
+          ['state', 'Please enter your state.'],
+          ['postal', 'Please enter your postal code.'],
+          ['country', 'Please enter your country.'],
+          ['cardName', 'Please enter the name on the card.'],
+          ['cardNumber', 'Please enter a card number.'],
+          ['expiry', 'Please enter the expiry date.'],
+          ['cvv', 'Please enter the CVV.']
+        ];
+
+        const problems = [];
+
+        required.forEach(pair => {
+          const field = document.getElementById(pair[0]);
+          if (!field.value.trim()) {
+            Shop.showFieldError(pair[0], pair[1]);
+            problems.push(pair[0]);
+          }
+        });
+
+        const email = document.getElementById('email').value.trim();
+        if (email && !/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email)) {
+          Shop.showFieldError('email', 'That email address does not look right.');
+          problems.push('email');
+        }
+
+        const phone = document.getElementById('phone').value.replace(/\D/g, '');
+        if (phone && (phone.length < 10 || phone.length > 12)) {
+          Shop.showFieldError('phone', 'Please enter a phone number of 10 to 12 digits.');
+          problems.push('phone');
+        }
+
+        const postal = document.getElementById('postal').value.replace(/\s/g, '');
+        if (postal && !/^\d{5,6}$/.test(postal)) {
+          Shop.showFieldError('postal', 'Postal codes are 5 or 6 digits.');
+          problems.push('postal');
+        }
+
+        const cardNumber = document.getElementById('cardNumber').value.replace(/\D/g, '');
+        if (cardNumber && (cardNumber.length < 13 || cardNumber.length > 19)) {
+          Shop.showFieldError('cardNumber', 'A card number has 13 to 19 digits.');
+          problems.push('cardNumber');
+        }
+
+        const expiry = document.getElementById('expiry').value.trim();
+        if (expiry) {
+          const match = /^(\d{2})\/(\d{2})$/.exec(expiry);
+          if (!match) {
+            Shop.showFieldError('expiry', 'Use the MM/YY format, for example 09/28.');
+            problems.push('expiry');
+          } else {
+            const month = Number(match[1]);
+            if (month < 1 || month > 12) {
+              Shop.showFieldError('expiry', 'The month must be between 01 and 12.');
+              problems.push('expiry');
+            }
           }
         }
 
-        // Basic email validation
-        const email = document.getElementById('email').value;
-        if (!email.includes('@')) {
-          alert('Please enter a valid email address');
-          return false;
+        const cvv = document.getElementById('cvv').value.trim();
+        if (cvv && !/^\d{3,4}$/.test(cvv)) {
+          Shop.showFieldError('cvv', 'The CVV is the 3 or 4 digit number on your card.');
+          problems.push('cvv');
         }
 
-        // Basic card number validation
-        const cardNumber = document.getElementById('cardNumber').value.replace(/\s/g, '');
-        if (cardNumber.length < 13 || cardNumber.length > 19) {
-          alert('Please enter a valid card number');
-          return false;
-        }
+        if (problems.length === 0) return true;
 
-        return true;
+        // Take them to the first thing that needs fixing.
+        const first = document.getElementById(problems[0]);
+        first.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        first.focus({ preventScroll: true });
+        Shop.toast(
+          problems.length === 1
+            ? 'One field needs your attention.'
+            : problems.length + ' fields need your attention.',
+          'error'
+        );
+        return false;
       }
 
       function placeOrder() {
-        if (cart.length === 0) {
-          alert('Your cart is empty!');
+        const lines = Shop.cartLines();
+        if (lines.length === 0) {
+          Shop.toast('Your cart is empty.', 'error');
           return;
         }
 
-        if (!validateForm()) {
-          return;
-        }
+        if (!validateForm()) return;
 
-        // Prepare order data
-        const orderData = {
+        const totals = Shop.totals();
+        const order = {
           orderId: 'ORD-' + Date.now(),
-          date: new Date().toLocaleDateString(),
-          items: cart,
+          placedAt: new Date().toISOString(),
+          status: 'Confirmed',
+          // Sizes, quantities and the prices paid are frozen into the order,
+          // so the order history stays true even if the catalogue changes.
+          items: lines.map(line => ({
+            id: line.id,
+            name: line.name,
+            image: line.image,
+            size: line.size,
+            quantity: line.quantity,
+            price: line.price
+          })),
           shipping: {
-            name: document.getElementById('fullName').value,
-            email: document.getElementById('email').value,
-            phone: document.getElementById('phone').value,
-            address: document.getElementById('address').value,
-            city: document.getElementById('city').value,
-            state: document.getElementById('state').value,
-            postal: document.getElementById('postal').value,
-            country: document.getElementById('country').value
+            name: document.getElementById('fullName').value.trim(),
+            email: document.getElementById('email').value.trim(),
+            phone: document.getElementById('phone').value.trim(),
+            address: document.getElementById('address').value.trim(),
+            city: document.getElementById('city').value.trim(),
+            state: document.getElementById('state').value.trim(),
+            postal: document.getElementById('postal').value.trim(),
+            country: document.getElementById('country').value.trim()
           },
           pricing: {
-            subtotal: cart.reduce((sum, item) => sum + item.price, 0),
-            shipping: SHIPPING_COST,
-            tax: Math.round(cart.reduce((sum, item) => sum + item.price, 0) * TAX_RATE),
-            total: Math.round(cart.reduce((sum, item) => sum + item.price, 0) * (1 + TAX_RATE) + SHIPPING_COST)
+            subtotal: totals.subtotal,
+            shipping: totals.shipping,
+            tax: totals.tax,
+            total: totals.total
           }
         };
 
-        // Save order to localStorage
-        let orders = JSON.parse(localStorage.getItem('orders')) || [];
-        orders.push(orderData);
-        localStorage.setItem('orders', JSON.stringify(orders));
+        Shop.saveOrder(order);
+        Shop.clearCart();
 
-        // Clear cart
-        localStorage.removeItem('cart');
+        document.getElementById('place-order-btn').disabled = true;
+        Shop.toast('Order ' + order.orderId + ' confirmed. Thank you!', 'success');
 
-        // Show success message and redirect
-        alert(`Order placed successfully!\n\nOrder ID: ${orderData.orderId}\n\nThank you for shopping with Chaddha Fashion!`);
-        window.location.href = 'index.html';
+        // A short pause so the confirmation is actually readable.
+        setTimeout(() => {
+          window.location.href = 'orders.html';
+        }, 1400);
       }
-
-      function goHome() {
-        window.location.href = 'index.html';
-      }
-
-      function goToCart() {
-        window.location.href = 'cart.html';
-      }
-
-      // Initialize
-      renderOrderItems();
-      updateOrderSummary();
     </script>
   </body>
 </html>

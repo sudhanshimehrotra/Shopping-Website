@@ -3,7 +3,10 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Sudhanshi | Premium Style</title>
+    <meta name="description" content="Shop the latest men's, women's and kids' fashion at Chaddha Fashion." />
+    <title>Chaddha Fashion | Premium Style</title>
+    <link rel="icon" href="./chaddha-logo.svg" type="image/svg+xml" />
+    <link rel="stylesheet" href="./shop.css" />
     <style>
       :root {
         --bg: #f7f1ee;
@@ -537,28 +540,70 @@
         .card { min-height: 260px; }
         .kids-intro { grid-template-columns: 1fr; padding: 24px; }
       }
+
+      /* --- Added with the search / sort / size shopping features --- */
+      .topbar { grid-template-columns: 170px 1fr minmax(200px, 270px) auto; }
+      .nav-box a {
+        display: inline-block;
+        padding: 10px 13px;
+        border-radius: 10px;
+        color: var(--ink);
+        font-size: 14px;
+        font-weight: 600;
+        letter-spacing: 0.04em;
+        text-decoration: none;
+        text-transform: uppercase;
+        transition: background 0.2s, color 0.2s;
+      }
+      .nav-box a:hover { background: var(--cream); color: var(--coral); }
+      .cart-icon { text-decoration: none; }
+      .view-all-link { text-decoration: none; }
+
+      /* Footer entries that lead somewhere are now real links. The About Us
+         column stays plain text, because those pages do not exist yet. */
+      .footer-col li a { color: #c6d4cf; text-decoration: none; transition: color 0.2s; }
+      .footer-col li a:hover { color: #fffaf2; text-decoration: underline; }
+
+      /* The section grids now hold the shared .shop-card, which brings its
+         own styling, so the old .card rules no longer apply to them. */
+      .product-grid { grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 16px; }
+
+      @media (max-width: 900px) {
+        .topbar { grid-template-columns: 1fr auto; }
+        .nav-box { grid-column: 1 / -1; grid-row: 3; justify-content: flex-start; overflow-x: auto; }
+        .topbar .site-search { grid-column: 1 / -1; grid-row: 2; }
+        .user-actions { grid-column: 2; grid-row: 1; }
+      }
+
+      @media (max-width: 760px) {
+        .product-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
+      }
     </style>
   </head>
   <body>
     <div class="page">
       <header class="topbar">
-        <div class="logo-box" onclick="goHome()">
+        <a class="logo-box" href="index.html">
           <img src="./chaddha-logo.svg" alt="Chaddha Fashion logo" />
         </div>
         <nav class="nav-box" aria-label="Main navigation">
-          <span onclick="goHome()">Home</span>
-          <span onclick="goToProducts('men')">Men</span>
-          <span onclick="goToProducts('women')">Women</span>
-          <span onclick="goToProducts('kids')">Kids</span>
-          <span>Sale</span>
-          <span onclick="location.href='blog.html'">Blog</span>
+          <a href="index.html">Home</a>
+          <a href="products.html?category=men">Men</a>
+          <a href="products.html?category=women">Women</a>
+          <a href="products.html?category=kids">Kids</a>
+          <a href="orders.html">Orders</a>
+          <a href="blog.html">Blog</a>
         </nav>
+        <form class="site-search" data-search-form role="search">
+          <input type="search" name="q" placeholder="Search for shirts, kurtas…" aria-label="Search products" />
+          <button type="submit">Search</button>
+        </form>
         <div class="user-actions">
-          <div class="cart-icon" onclick="goToCart()">
+          <a class="cart-icon" href="cart.html" aria-label="Shopping cart">
             🛒
-            <div class="cart-badge" id="cart-count">0</div>
-          </div>
-          <button class="logout-btn" onclick="logoutUser()">Logout</button>
+            <span class="cart-badge" data-cart-count>0</span>
+          </a>
+          <button class="logout-btn" type="button" data-logout>Logout</button>
         </div>
       </header>
 
@@ -591,7 +636,7 @@
       <div class="section-container">
         <div class="section-header">
           <h3>Featured Products</h3>
-          <a class="view-all-link" onclick="goToProducts()">View All →</a>
+          <a class="view-all-link" href="products.html">View All →</a>
         </div>
         <section class="product-grid" id="featured-grid">
           <!-- Featured products will be inserted here -->
@@ -602,7 +647,7 @@
       <div class="section-container">
         <div class="section-header">
           <h3>New Arrivals</h3>
-          <a class="view-all-link" onclick="goToProducts()">View All →</a>
+          <a class="view-all-link" href="products.html">View All →</a>
         </div>
         <section class="product-grid" id="new-arrivals-grid">
           <!-- New arrivals will be inserted here -->
@@ -613,7 +658,7 @@
       <div class="section-container">
         <div class="section-header">
           <h3>Best Sellers</h3>
-          <a class="view-all-link" onclick="goToProducts()">View All →</a>
+          <a class="view-all-link" href="products.html">View All →</a>
         </div>
         <section class="product-grid" id="best-sellers-grid">
           <!-- Best sellers will be inserted here -->
@@ -624,7 +669,7 @@
       <div class="section-container">
         <div class="section-header">
           <h3>Trending Now</h3>
-          <a class="view-all-link" onclick="goToProducts()">View All →</a>
+          <a class="view-all-link" href="products.html">View All →</a>
         </div>
         <section class="product-grid" id="trending-grid">
           <!-- Trending products will be inserted here -->
@@ -635,7 +680,7 @@
       <div class="section-container kids-collection-section">
         <div class="section-header">
           <h3>Kids Collection</h3>
-          <a class="view-all-link" onclick="goToProducts('kids')">Shop Kids →</a>
+          <a class="view-all-link" href="products.html?category=kids">Shop Kids →</a>
         </div>
         <section class="kids-intro">
           <div>
@@ -667,21 +712,20 @@
           <div class="footer-col">
             <h4>Shop</h4>
             <ul>
-              <li>Women</li>
-              <li>Men</li>
-              <li>New Arrivals</li>
-              <li>Sale</li>
+              <li><a href="products.html?category=women">Women</a></li>
+              <li><a href="products.html?category=men">Men</a></li>
+              <li><a href="products.html?category=kids">Kids</a></li>
+              <li><a href="products.html?type=new">New Arrivals</a></li>
+              <li><a href="products.html?type=bestseller">Best Sellers</a></li>
             </ul>
           </div>
 
           <div class="footer-col">
             <h4>Customer Care</h4>
             <ul>
-              <li>Contact Us</li>
-              <li>FAQs</li>
-              <li>Shipping &amp; Delivery</li>
-              <li>Returns &amp; Refunds</li>
-              <li>Order</li>
+              <li><a href="orders.html">My Orders</a></li>
+              <li><a href="cart.html">My Cart</a></li>
+              <li><a href="blog.html">Style Journal</a></li>
             </ul>
           </div>
 
@@ -712,148 +756,28 @@
       </footer>
     </div>
 
+    <script src="./shop-data.js"></script>
+    <script src="./shop.js"></script>
     <script>
-      function checkLogin() {
-        const loggedIn = localStorage.getItem('chaddha_logged_in');
-        if (loggedIn !== 'true') {
-          window.location.href = 'login.html';
-          return false;
-        }
-        return true;
-      }
+      Shop.requireLogin();
+      Shop.initHeader();
 
-      function logoutUser() {
-        localStorage.removeItem('chaddha_logged_in');
-        localStorage.removeItem('chaddha_user_email');
-        localStorage.removeItem('chaddha_user_password');
-        window.location.href = 'login.html';
-      }
-
-      checkLogin();
-
-      // Product catalog grouped by gender and collection.
-      function getProductName(subcategory, price, imageNumber) {
-        const namedProducts = {
-          'Men T-Shirt-899': 'Men White T-Shirt',
-          'Men T-Shirt-999': 'Men Light Brown Simple T-Shirt',
-          'Men T-Shirt-1099': 'Men Brown T-Shirt',
-          'Men T-Shirt-1199': 'Men Casual T-Shirt',
-          'Men T-Shirt-1299': 'Men Casual Tshirt',
-          'Men Shirt-1399': 'Men Maroon Shirt',
-          'Men Shirt-1499': 'Men Blue Shirt',
-          'Men Shirt-1599': 'Men Party Wear Black Shirt',
-          'Men Shirt-1699': 'Men Formal Brown Shirt',
-          'Women Dresses-1799': 'Women Floral Dress',
-          'Women Dresses-1899': 'Women A Line Dress'
-        };
-        return namedProducts[`${subcategory}-${price}`] || (subcategory === 'Women Dresses' || subcategory === 'Women Ethnic Wear' ? subcategory : `${subcategory} ${imageNumber}`);
-      }
-
-      const allProducts = [
-        ...[
-          ['Men T-Shirt', 'Men Tshirt', 899], ['Men T-Shirt', 'Men Tshirt', 999], ['Men T-Shirt', 'Men Tshirt', 1099], ['Men T-Shirt', 'Men Tshirt', 1199], ['Men T-Shirt', 'Men Tshirt', 1299],
-          ['Men Shirt', 'Men Shirt', 1399], ['Men Shirt', 'Men Shirt', 1499], ['Men Shirt', 'Men Shirt', 1599], ['Men Shirt', 'Men Shirt', 1699],
-          ['Women Dresses', 'Women Dresses', 1799], ['Women Dresses', 'Women Dresses', 1899], ['Women Dresses', 'Women Dresses', 1999], ['Women Dresses', 'Women Dresses', 2099],
-          ['Women Ethnic Wear', 'Women ethnic Dresses', 2199], ['Women Ethnic Wear', 'Women ethnic Dresses', 2299], ['Women Ethnic Wear', 'Women ethnic Dresses', 2399], ['Women Ethnic Wear', 'Women ethnic Dresses', 2499],
-          ['Kids Ethnic Wear', 'Ethnic kids wear', 1299, 'avif'], ['Kids Ethnic Wear', 'Ethnic kids wear 2', 1399, 'webp'],
-          ['Kids Casual', 'kids wear', 899, 'jpg'], ['Kids Casual', 'Kids wear', 999, 'webp']
-        ].map((item, index) => {
-          const [subcategory, filePrefix, price, fileExtension] = item;
-          const imageNumber = index < 5 ? index + 1 : ((index - 1) % 4) + 1;
-          const category = subcategory.startsWith('Men') ? 'men' : subcategory.startsWith('Kids') ? 'kids' : 'women';
-          const imageName = fileExtension ? filePrefix : category === 'women' ? `${filePrefix} ${imageNumber}` : `${filePrefix} image ${imageNumber}`;
-          return {
-            id: index + 1,
-            name: getProductName(subcategory, price, imageNumber),
-            image: `./${imageName}.${fileExtension || (category === 'men' ? 'avif' : 'jpg')}`,
-            price,
-            description: `Explore our ${subcategory.toLowerCase()} collection.`,
-            category,
-            subcategory,
-            featured: index < 8,
-            newArrival: index >= 4,
-            bestSeller: index % 3 !== 0,
-            trending: index % 2 === 0
-          };
-        })
+      // Each shelf on the home page is just a filter over the shared
+      // catalogue, rendered with the shared product card.
+      const SHELVES = [
+        { id: 'featured-grid', pick: product => product.featured },
+        { id: 'new-arrivals-grid', pick: product => product.newArrival },
+        { id: 'best-sellers-grid', pick: product => product.bestSeller },
+        { id: 'trending-grid', pick: product => product.trending },
+        { id: 'kids-ethnic-grid', pick: product => product.subcategory === 'Kids Ethnic Wear' },
+        { id: 'kids-casual-grid', pick: product => product.subcategory === 'Kids Casual' }
       ];
 
-      // Cart management
-      let cart = JSON.parse(localStorage.getItem('cart')) || [];
-
-      function updateCartCount() {
-        const count = cart.length;
-        document.getElementById('cart-count').textContent = count;
-      }
-
-      function renderProductCard(product) {
-        return `
-          <article class="card" onclick="viewProduct(${product.id})">
-            <img src="${product.image}" alt="${product.name}" />
-            <div class="card-overlay" data-name="${product.name}">
-              <button onclick="addToCart(${product.id}, event)">Add to Cart</button>
-            </div>
-          </article>
-        `;
-      }
-
-      function renderProducts() {
-        // Featured Products
-        const featured = allProducts.filter(p => p.featured);
-        document.getElementById('featured-grid').innerHTML = featured.map(renderProductCard).join('');
-
-        // New Arrivals
-        const newArrivals = allProducts.filter(p => p.newArrival);
-        document.getElementById('new-arrivals-grid').innerHTML = newArrivals.map(renderProductCard).join('');
-
-        // Best Sellers
-        const bestSellers = allProducts.filter(p => p.bestSeller);
-        document.getElementById('best-sellers-grid').innerHTML = bestSellers.map(renderProductCard).join('');
-
-        // Trending
-        const trending = allProducts.filter(p => p.trending);
-        document.getElementById('trending-grid').innerHTML = trending.map(renderProductCard).join('');
-
-        const kidsEthnic = allProducts.filter(p => p.subcategory === 'Kids Ethnic Wear');
-        document.getElementById('kids-ethnic-grid').innerHTML = kidsEthnic.map(renderProductCard).join('');
-
-        const kidsCasual = allProducts.filter(p => p.subcategory === 'Kids Casual');
-        document.getElementById('kids-casual-grid').innerHTML = kidsCasual.map(renderProductCard).join('');
-      }
-
-      function addToCart(productId, event) {
-        event.stopPropagation();
-        const product = allProducts.find(p => p.id === productId);
-        if (product) {
-          cart.push({...product, cartId: Date.now()});
-          localStorage.setItem('cart', JSON.stringify(cart));
-          updateCartCount();
-          alert(`${product.name} added to cart!`);
-        }
-      }
-
-      function viewProduct(productId) {
-        const product = allProducts.find(p => p.id === productId);
-        if (product) {
-          alert(`${product.name}\n\nPrice: ₹${product.price}\n\n${product.description}\n\nClick "Add to Cart" to purchase!`);
-        }
-      }
-
-      function goToCart() {
-        window.location.href = 'cart.html';
-      }
-
-      function goHome() {
-        window.location.href = 'index.html';
-      }
-
-      function goToProducts(category) {
-        window.location.href = category ? `products.html?category=${category}` : 'products.html';
-      }
-
-      // Initialize
-      updateCartCount();
-      renderProducts();
+      SHELVES.forEach(shelf => {
+        const host = document.getElementById(shelf.id);
+        if (!host) return;
+        host.innerHTML = PRODUCTS.filter(shelf.pick).map(Shop.productCard).join('');
+      });
     </script>
   </body>
 </html>

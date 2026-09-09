@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 400" role="img" aria-label="Image unavailable">
+  <rect width="320" height="400" fill="#eee8dc" />
+  <g fill="none" stroke="#b6a894" stroke-width="6" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M132 150h-18l-22 16v34l14 6v70h108v-70l14-6v-34l-22-16h-18" />
+    <path d="M132 150c0 15 12 26 28 26s28-11 28-26" />
+  </g>
+  <text x="160" y="322" fill="#8c7f6d" font-family="Georgia, serif" font-size="19" text-anchor="middle">
+    Image unavailable
+  </text>
+</svg>

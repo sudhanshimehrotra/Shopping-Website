@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="Your past orders at Chaddha Fashion." />
+    <title>My Orders | Chaddha Fashion</title>
+    <link rel="icon" href="./chaddha-logo.svg" type="image/svg+xml" />
+    <link rel="stylesheet" href="./shop.css" />
+  </head>
+  <body class="shop-body">
+    <div class="shop-shell">
+      <header class="shop-header">
+        <a class="shop-header-logo" href="index.html">
+          <img src="./chaddha-logo.svg" alt="Chaddha Fashion logo" />
+        </a>
+        <nav class="shop-nav" aria-label="Main navigation">
+          <a href="index.html">Home</a>
+          <a href="products.html?category=men">Men</a>
+          <a href="products.html?category=women">Women</a>
+          <a href="products.html?category=kids">Kids</a>
+          <a class="is-active" href="orders.html" aria-current="page">Orders</a>
+          <a href="blog.html">Blog</a>
+        </nav>
+        <form class="site-search" data-search-form role="search">
+          <input type="search" name="q" placeholder="Search for shirts, kurtas…" aria-label="Search products" />
+          <button type="submit">Search</button>
+        </form>
+        <div class="shop-header-actions">
+          <a class="shop-cart-link" href="cart.html" aria-label="Shopping cart">
+            🛒
+            <span class="shop-cart-badge" data-cart-count>0</span>
+          </a>
+          <button class="shop-logout" type="button" data-logout>Logout</button>
+        </div>
+      </header>
+
+      <main>
+        <nav class="shop-crumbs" aria-label="Breadcrumb">
+          <a href="index.html">Home</a><span>/</span>My Orders
+        </nav>
+        <h1 class="shop-title">My Orders</h1>
+        <p class="shop-subtitle" id="orders-intro">Every order you have placed, newest first.</p>
+        <div id="orders-root"></div>
+      </main>
+
+      <footer class="shop-footer">© 2026 Chaddha Fashion. Style, made personal.</footer>
+    </div>
+
+    <script src="./shop-data.js"></script>
+    <script src="./shop.js"></script>
+    <script>
+      Shop.requireLogin();
+      Shop.initHeader();
+
+      renderOrders();
+
+      function renderOrders() {
+        const orders = Shop.getOrders();
+        const root = document.getElementById('orders-root');
+        const intro = document.getElementById('orders-intro');
+
+        if (orders.length === 0) {
+          intro.textContent = '';
+          root.innerHTML =
+            '<div class="shop-empty">' +
+            '<h2>No orders yet</h2>' +
+            '<p>Once you place an order it will show up here with everything you bought.</p>' +
+            '<a class="shop-btn" href="products.html">Start shopping</a>' +
+            '</div>';
+          return;
+        }
+
+        intro.textContent =
+          orders.length === 1 ? '1 order placed so far.' : orders.length + ' orders placed so far.';
+
+        root.innerHTML = orders.map(renderOrder).join('');
+
+        document.querySelectorAll('[data-reorder]').forEach(button => {
+          button.addEventListener('click', () => reorder(button.dataset.reorder));
+        });
+      }
+
+      function renderOrder(order) {
+        const items = Array.isArray(order.items) ? order.items : [];
+        const pricing = order.pricing || {};
+        const shipping = order.shipping || {};
+
+        const itemCount = items.reduce((sum, item) => sum + (Number(item.quantity) || 1), 0);
+
+        const lines = items
+          .map(item => {
+            const qty = Number(item.quantity) || 1;
+            const lineTotal = (Number(item.price) || 0) * qty;
+            const sizeNote = item.size ? 'Size ' + item.size + ' · ' : '';
+            return (
+              '<div class="od-line">' +
+              '<img src="' + item.image + '" alt="' + item.name + '" />' +
+              '<div>' +
+              '<h4 class="od-line-name">' + item.name + '</h4>' +
+              '<p class="od-line-meta">' + sizeNote + 'Qty ' + qty + ' · ' + Shop.money(item.price) + ' each</p>' +
+              '</div>' +
+              '<div class="od-line-total">' + Shop.money(lineTotal) + '</div>' +
+              '</div>'
+            );
+          })
+          .join('');
+
+        const addressParts = [
+          shipping.name,
+          shipping.address,
+          [shipping.city, shipping.state, shipping.postal].filter(Boolean).join(', '),
+          shipping.country,
+          shipping.phone
+        ].filter(Boolean);
+
+        return (
+          '<article class="od-order">' +
+          '<div class="od-head">' +
+          '<div class="od-head-facts">' +
+          '<div><p class="od-fact-label">Order</p><p class="od-fact-value">' + order.orderId + '</p></div>' +
+          '<div><p class="od-fact-label">Placed on</p><p class="od-fact-value">' + Shop.formatOrderDate(order.placedAt) + '</p></div>' +
+          '<div><p class="od-fact-label">Items</p><p class="od-fact-value">' + itemCount + '</p></div>' +
+          '<div><p class="od-fact-label">Total</p><p class="od-fact-value">' + Shop.money(pricing.total) + '</p></div>' +
+          '</div>' +
+          '<span class="od-status">' + (order.status || 'Confirmed') + '</span>' +
+          '</div>' +
+          '<div class="od-lines">' + lines + '</div>' +
+          '<div class="od-foot">' +
+          '<div class="od-address">' +
+          '<h4>Delivering to</h4>' +
+          '<p>' + addressParts.join('<br />') + '</p>' +
+          '</div>' +
+          '<div class="od-money">' +
+          '<div class="od-money-row"><span>Subtotal</span><span>' + Shop.money(pricing.subtotal) + '</span></div>' +
+          '<div class="od-money-row"><span>Shipping</span><span>' + Shop.money(pricing.shipping) + '</span></div>' +
+          '<div class="od-money-row"><span>Tax</span><span>' + Shop.money(pricing.tax) + '</span></div>' +
+          '<div class="od-money-row is-total"><span>Total</span><span>' + Shop.money(pricing.total) + '</span></div>' +
+          '<button type="button" class="shop-btn shop-btn-ghost od-reorder" data-reorder="' + order.orderId + '">Buy these again</button>' +
+          '</div>' +
+          '</div>' +
+          '</article>'
+        );
+      }
+
+      // Puts everything from a past order back into the cart, skipping
+      // anything that is no longer in the catalogue.
+      function reorder(orderId) {
+        const order = Shop.getOrders().find(entry => entry.orderId === orderId);
+        if (!order) {
+          Shop.toast('That order could not be found.', 'error');
+          return;
+        }
+
+        let added = 0;
+        let skipped = 0;
+        (order.items || []).forEach(item => {
+          const result = Shop.addToCart(item.id, item.size, item.quantity);
+          if (result.ok) added += 1;
+          else skipped += 1;
+        });
+
+        if (added === 0) {
+          Shop.toast('None of those items are available right now.', 'error');
+          return;
+        }
+
+        Shop.toast(
+          added + ' item' + (added === 1 ? '' : 's') + ' back in your cart' +
+            (skipped > 0 ? ' (' + skipped + ' unavailable)' : '') + '.',
+          'success'
+        );
+      }
+    </script>
+  </body>
+</html>

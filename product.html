@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="Product details, sizes and prices at Chaddha Fashion." />
+    <title>Product | Chaddha Fashion</title>
+    <link rel="icon" href="./chaddha-logo.svg" type="image/svg+xml" />
+    <link rel="stylesheet" href="./shop.css" />
+  </head>
+  <body class="shop-body">
+    <div class="shop-shell">
+      <header class="shop-header">
+        <a class="shop-header-logo" href="index.html">
+          <img src="./chaddha-logo.svg" alt="Chaddha Fashion logo" />
+        </a>
+        <nav class="shop-nav" aria-label="Main navigation">
+          <a href="index.html">Home</a>
+          <a href="products.html?category=men">Men</a>
+          <a href="products.html?category=women">Women</a>
+          <a href="products.html?category=kids">Kids</a>
+          <a href="orders.html">Orders</a>
+          <a href="blog.html">Blog</a>
+        </nav>
+        <form class="site-search" data-search-form role="search">
+          <input type="search" name="q" placeholder="Search for shirts, kurtas…" aria-label="Search products" />
+          <button type="submit">Search</button>
+        </form>
+        <div class="shop-header-actions">
+          <a class="shop-cart-link" href="cart.html" aria-label="Shopping cart">
+            🛒
+            <span class="shop-cart-badge" data-cart-count>0</span>
+          </a>
+          <button class="shop-logout" type="button" data-logout>Logout</button>
+        </div>
+      </header>
+
+      <main id="product-root">
+        <p class="shop-subtitle">Loading product…</p>
+      </main>
+
+      <section id="related-section" hidden>
+        <h2 class="shop-section-title">You may also like</h2>
+        <div class="shop-card-grid" id="related-grid"></div>
+      </section>
+
+      <footer class="shop-footer">© 2026 Chaddha Fashion. Style, made personal.</footer>
+    </div>
+
+    <script src="./shop-data.js"></script>
+    <script src="./shop.js"></script>
+    <script>
+      Shop.requireLogin();
+      Shop.initHeader();
+
+      const productId = new URLSearchParams(window.location.search).get('id');
+      const product = Shop.findProduct(productId);
+      const root = document.getElementById('product-root');
+
+      // Chosen size and quantity live here until "Add to Cart" is pressed.
+      let chosenSize = null;
+      let quantity = 1;
+
+      if (!product) {
+        root.innerHTML =
+          '<div class="shop-empty">' +
+          '<h2>We could not find that product</h2>' +
+          '<p>It may have sold out or the link might be out of date.</p>' +
+          '<a class="shop-btn" href="products.html">Browse all products</a>' +
+          '</div>';
+      } else {
+        document.title = product.name + ' | Chaddha Fashion';
+        renderProduct();
+        renderRelated();
+      }
+
+      // The catalogue has one photo per product, so the gallery borrows the
+      // other photos from the same collection to give a sense of the range.
+      function galleryImages() {
+        const siblings = PRODUCTS.filter(
+          item => item.subcategory === product.subcategory && item.id !== product.id
+        ).map(item => item.image);
+        return [product.image].concat(siblings.slice(0, 3));
+      }
+
+      function renderProduct() {
+        const images = galleryImages();
+        const sizeOptions = product.sizes
+          .map(
+            size =>
+              '<label class="size-option">' +
+              '<input type="radio" name="size" value="' + size + '" />' +
+              '<span>' + size + '</span>' +
+              '</label>'
+          )
+          .join('');
+
+        const thumbs = images
+          .map(
+            (src, index) =>
+              '<button type="button" class="pd-thumb' + (index === 0 ? ' is-active' : '') + '" ' +
+              'data-image="' + src + '" aria-label="View image ' + (index + 1) + '">' +
+              '<img src="' + src + '" alt="" />' +
+              '</button>'
+          )
+          .join('');
+
+        const detailItems = product.details.map(item => '<li>' + item + '</li>').join('');
+        const sizeHint = product.sizes.length === 1 ? 'One size' : 'Select a size';
+
+        root.innerHTML =
+          '<nav class="shop-crumbs" aria-label="Breadcrumb">' +
+          '<a href="index.html">Home</a><span>/</span>' +
+          '<a href="products.html?category=' + product.category + '">' + Shop.categoryLabel(product.category) + '</a><span>/</span>' +
+          '<a href="products.html?subcategory=' + encodeURIComponent(product.subcategory) + '">' + product.subcategory + '</a>' +
+          '</nav>' +
+          '<div class="pd-layout">' +
+          '<div>' +
+          '<div class="pd-gallery-main"><img id="pd-main-image" src="' + images[0] + '" alt="' + product.name + '" /></div>' +
+          (images.length > 1 ? '<div class="pd-thumbs">' + thumbs + '</div>' : '') +
+          '</div>' +
+          '<div>' +
+          '<p class="pd-eyebrow">' + Shop.categoryLabel(product.category) + ' · ' + product.subcategory + '</p>' +
+          '<h1 class="pd-name">' + product.name + '</h1>' +
+          '<p class="pd-rating"><span class="shop-stars">' + Shop.stars(product.rating) + '</span> ' +
+          product.rating.toFixed(1) + ' · ' + product.reviews + ' reviews</p>' +
+          '<p class="pd-price">' + Shop.money(product.price) + '</p>' +
+          '<p class="pd-price-note">Inclusive of all taxes. Shipping calculated at checkout.</p>' +
+          '<p class="pd-description">' + product.description + '</p>' +
+          '<div id="pd-in-cart"></div>' +
+          '<div class="pd-block">' +
+          '<div class="pd-block-head">' +
+          '<span class="pd-label">' + sizeHint + '</span>' +
+          '<span class="pd-size-guide">' + (product.category === 'kids' ? 'Ages shown in years' : 'Fits true to size') + '</span>' +
+          '</div>' +
+          '<div class="size-picker" id="size-picker">' + sizeOptions + '</div>' +
+          '<div id="size-error"></div>' +
+          '</div>' +
+          '<div class="pd-block">' +
+          '<div class="pd-block-head"><span class="pd-label">Quantity</span></div>' +
+          '<div class="qty-stepper">' +
+          '<button type="button" id="qty-down" aria-label="Reduce quantity">−</button>' +
+          '<span class="qty-value" id="qty-value" aria-live="polite">1</span>' +
+          '<button type="button" id="qty-up" aria-label="Increase quantity">+</button>' +
+          '</div>' +
+          '</div>' +
+          '<div class="pd-actions">' +
+          '<button type="button" class="pd-add-btn" id="add-btn">Add to Cart</button>' +
+          '<a class="pd-cart-btn" href="cart.html">Go to Cart</a>' +
+          '</div>' +
+          '<div class="pd-details">' +
+          '<h3>Product details</h3>' +
+          '<ul>' + detailItems + '</ul>' +
+          '</div>' +
+          '</div>' +
+          '</div>';
+
+        wireUp();
+        // A single-size product needs no choosing, so pick it for them.
+        if (product.sizes.length === 1) {
+          chosenSize = product.sizes[0];
+          const only = document.querySelector('.size-option input');
+          if (only) only.checked = true;
+        }
+        showWhatIsAlreadyInTheCart();
+      }
+
+      function wireUp() {
+        document.querySelectorAll('.pd-thumb').forEach(thumb => {
+          thumb.addEventListener('click', () => {
+            document.getElementById('pd-main-image').src = thumb.dataset.image;
+            document.querySelectorAll('.pd-thumb').forEach(other => other.classList.remove('is-active'));
+            thumb.classList.add('is-active');
+          });
+        });
+
+        document.querySelectorAll('.size-option input').forEach(input => {
+          input.addEventListener('change', () => {
+            chosenSize = input.value;
+            document.getElementById('size-error').innerHTML = '';
+            showWhatIsAlreadyInTheCart();
+          });
+        });
+
+        document.getElementById('qty-up').addEventListener('click', () => setQuantity(quantity + 1));
+        document.getElementById('qty-down').addEventListener('click', () => setQuantity(quantity - 1));
+        document.getElementById('add-btn').addEventListener('click', addChosenToCart);
+
+        setQuantity(1);
+      }
+
+      function setQuantity(next) {
+        quantity = Math.min(Shop.MAX_PER_LINE, Math.max(1, next));
+        document.getElementById('qty-value').textContent = quantity;
+        document.getElementById('qty-down').disabled = quantity <= 1;
+        document.getElementById('qty-up').disabled = quantity >= Shop.MAX_PER_LINE;
+      }
+
+      // A quiet note if this exact product and size is already in the cart,
+      // so nobody adds a third of the same thing by accident.
+      function showWhatIsAlreadyInTheCart() {
+        const slot = document.getElementById('pd-in-cart');
+        if (!slot) return;
+
+        const matching = Shop.cartLines().filter(line => line.id === product.id);
+        if (matching.length === 0) {
+          slot.innerHTML = '';
+          return;
+        }
+
+        const summary = matching
+          .map(line => line.quantity + ' × size ' + line.size)
+          .join(', ');
+        slot.innerHTML = '<p class="pd-in-cart">Already in your cart: ' + summary + '.</p>';
+      }
+
+      function addChosenToCart() {
+        if (!chosenSize) {
+          document.getElementById('size-error').innerHTML =
+            '<p class="field-error">Please pick a size before adding to the cart.</p>';
+          Shop.toast('Choose a size first.', 'error');
+          return;
+        }
+
+        const result = Shop.addToCart(product.id, chosenSize, quantity);
+
+        if (!result.ok && result.reason === 'limit') {
+          Shop.toast('You already have ' + Shop.MAX_PER_LINE + ' of this size in your cart.', 'error');
+          return;
+        }
+        if (!result.ok) {
+          Shop.toast('Sorry, that could not be added.', 'error');
+          return;
+        }
+
+        Shop.toast(
+          quantity + ' × ' + product.name + ' (size ' + chosenSize + ') added to your cart.',
+          'success'
+        );
+        showWhatIsAlreadyInTheCart();
+      }
+
+      function renderRelated() {
+        // Same collection first; if that is thin, fall back to the category.
+        let related = PRODUCTS.filter(
+          item => item.subcategory === product.subcategory && item.id !== product.id
+        );
+        if (related.length < 4) {
+          const extra = PRODUCTS.filter(
+            item =>
+              item.category === product.category &&
+              item.id !== product.id &&
+              !related.includes(item)
+          );
+          related = related.concat(extra);
+        }
+        related = related.slice(0, 4);
+
+        if (related.length === 0) return;
+        document.getElementById('related-grid').innerHTML = related.map(Shop.productCard).join('');
+        document.getElementById('related-section').hidden = false;
+      }
+    </script>
+  </body>
+</html>
